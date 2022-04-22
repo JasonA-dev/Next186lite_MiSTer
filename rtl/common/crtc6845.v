@@ -18,7 +18,7 @@ module crtc6845(
     input write,
     input read,
     input[15:0] bus,
-    output[7:0] bus_out,
+    output reg [7:0] bus_out,
 
     input lock,
 
@@ -29,7 +29,8 @@ module crtc6845(
     output cursor,
     output [13:0] mem_addr,
     output [4:0] row_addr,
-    output line_reset);
+    output line_reset
+);
 
     parameter H_TOTAL = 0;
     parameter H_DISP = 0;
@@ -44,7 +45,7 @@ module crtc6845(
     parameter C_END = 0;
 
     reg[4:0] cur_addr;
-    reg[7:0] bus_out;
+    // reg[7:0] bus_out;
 
     // Address register
     always @ (posedge clk) begin

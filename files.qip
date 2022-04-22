@@ -1,5 +1,62 @@
 set_global_assignment -name VERILOG_FILE rtl/lfsr.v
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/cos.sv
-set_global_assignment -name SYSTEMVERILOG_FILE rtl/mycore.v
-set_global_assignment -name SDC_FILE mycore.sdc
-set_global_assignment -name SYSTEMVERILOG_FILE mycore.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/Next186Lite.v
+set_global_assignment -name SDC_FILE Next186Lite.sdc
+set_global_assignment -name SYSTEMVERILOG_FILE Next186Lite.sv
+
+#common
+set_global_assignment -name VERILOG_FILE rtl/common/cache_controller.v
+set_global_assignment -name VERILOG_FILE rtl/common/cga_attrib.v
+set_global_assignment -name VERILOG_FILE rtl/common/cga_pixel.v
+set_global_assignment -name VERILOG_FILE rtl/common/cga_scandoubler.v
+set_global_assignment -name VERILOG_FILE rtl/common/cga_sequencer.v
+set_global_assignment -name VERILOG_FILE rtl/common/cga_vgaport.v
+set_global_assignment -name VERILOG_FILE rtl/common/cga.v
+set_global_assignment -name VERILOG_FILE rtl/common/crtc6845.v
+set_global_assignment -name VERILOG_FILE rtl/common/KB_8042.v
+#set_global_assignment -name VERILOG_FILE rtl/common/multiboot.v
+set_global_assignment -name VERILOG_FILE rtl/common/PIC_8259.v
+set_global_assignment -name VERILOG_FILE rtl/common/sram.v
+set_global_assignment -name VERILOG_FILE rtl/common/timer8253.v
+set_global_assignment -name VERILOG_FILE rtl/common/unit186.v
+set_global_assignment -name VERILOG_FILE rtl/common/vga.v
+
+#Next186
+set_global_assignment -name VERILOG_FILE rtl/Next186/Next186_ALU.v
+set_global_assignment -name VERILOG_FILE rtl/Next186/Next186_BIU_2T_delayread.v
+set_global_assignment -name VERILOG_FILE rtl/Next186/Next186_CPU.v
+set_global_assignment -name VERILOG_FILE rtl/Next186/Next186_Regs.v
+
+#pll
+set_global_assignment -name VERILOG_FILE rtl/pll/pll_0002.v
+
+#jtopl2
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_acc.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_csr.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_div.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_eg_cnt.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_eg_comb.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_eg_ctrl.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_eg_final.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_eg_pure.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_eg_step.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_eg.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_exprom.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_lfo.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_logsin.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_mmr.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_noise.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_op.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_pg_comb.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_pg_inc.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_pg_rhy.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_pg_sum.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_pg.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_pm.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_reg.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_sh_rst.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_sh.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_single_acc.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_timers.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl.v
+set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl2.v

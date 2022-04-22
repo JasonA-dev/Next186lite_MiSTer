@@ -68,13 +68,13 @@ module cga(
     wire bw_mode;
     wire mode_640;
     wire tandy_16_mode;
-    wire video_enabled;
+    reg video_enabled; // was wire
     wire blink_enabled;
 
     wire hsync_int;
     wire vsync_l;
     wire cursor;
-    wire[3:0] video;
+    // wire [3:0] video;
     wire display_enable;
 
     // Two different clocks from the sequencer
@@ -214,11 +214,16 @@ module cga(
     assign hres_mode = cga_control_reg[0]; // 1=80x25,0=40x25
     assign grph_mode = cga_control_reg[1]; // 1=graphics, 0=text
     assign bw_mode = cga_control_reg[2]; // 1=b&w, 0=color
-    if (NO_DISPLAY_DISABLE == 1) begin
-        assign video_enabled = 1;
-    end else begin
-        assign video_enabled = cga_control_reg[3];
+
+    always @ (posedge clk)
+    begin
+        if (NO_DISPLAY_DISABLE == 1) begin
+            assign video_enabled = 1;
+        end else begin
+            assign video_enabled = cga_control_reg[3];
+        end
     end
+
     assign mode_640 = cga_control_reg[4]; // 1=640x200 mode, 0=others
     assign blink_enabled = cga_control_reg[5];
 
