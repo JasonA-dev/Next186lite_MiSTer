@@ -305,6 +305,11 @@ wire VSync;
 wire ce_pix;
 wire [7:0] video;
 
+wire [31:0] sd_lba;
+wire        sd_rd;
+wire        sd_wr;
+wire        sd_ack;
+
 Next186Lite next186Lite
 (
 	.clk(clk_sys),
@@ -348,10 +353,10 @@ Next186Lite next186Lite
 	.PS2DATA(), 	// io
 	.PS2DATB(), 	// io
 
-	.SD_nCS(), 		// o
-	.SD_DI(), 		// o
-	.SD_CK(), 		// o
-	.SD_DO(), 		// i
+	.SD_nCS(sd_cs), 		// o
+	.SD_DI(sd_sdi), 		// o
+	.SD_CK(sd_sck), 		// o
+	.SD_DO(sd_sdo), 		// i
 
 	.P_A(), 		// i
 	.P_U(), 		// i
