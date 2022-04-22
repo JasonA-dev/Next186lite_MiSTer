@@ -10,6 +10,12 @@ module  pll_0002(
 	// interface 'outclk0'
 	output wire outclk_0,
 
+	// interface 'outclk1'
+	output wire outclk_1,
+
+	// interface 'outclk2'
+	output wire outclk_2,
+
 	// interface 'locked'
 	output wire locked
 );
@@ -77,7 +83,7 @@ module  pll_0002(
 		.pll_subtype("General")
 	) altera_pll_i (
 		.rst	(rst),
-		.outclk	({outclk_0}),
+		.outclk	({outclk_2, outclk_1, outclk_0}),
 		.locked	(locked),
 		.fboutclk	( ),
 		.fbclk	(1'b0),

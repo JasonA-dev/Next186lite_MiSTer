@@ -1,7 +1,7 @@
 module bootcore (
     input wire clk_icap,   // WARNING: this clock must not be greater than 20MHz (50ns period)
-    input wire coldreset = 1'b0,
-	 input wire masterreset = 1'b0,	 
+    input wire coldreset, // = 1'b0,
+	 input wire masterreset, // = 1'b0,	 
 	 input wire we,
 	 input wire [7:0] corenn,
 	 output reg coreset = 1'b0

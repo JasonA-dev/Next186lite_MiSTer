@@ -21,6 +21,11 @@ set_global_assignment -name VERILOG_FILE rtl/common/timer8253.v
 set_global_assignment -name VERILOG_FILE rtl/common/unit186.v
 set_global_assignment -name VERILOG_FILE rtl/common/vga.v
 
+#ipcore
+set_global_assignment -name VERILOG_FILE rtl/ipcore/BRAM_8KB_BIOS.v
+set_global_assignment -name VERILOG_FILE rtl/ipcore/BRAM_32KB_CRTC.v
+set_global_assignment -name VERILOG_FILE rtl/ipcore/cache.v
+
 #Next186
 set_global_assignment -name VERILOG_FILE rtl/Next186/Next186_ALU.v
 set_global_assignment -name VERILOG_FILE rtl/Next186/Next186_BIU_2T_delayread.v
@@ -29,6 +34,10 @@ set_global_assignment -name VERILOG_FILE rtl/Next186/Next186_Regs.v
 
 #pll
 set_global_assignment -name VERILOG_FILE rtl/pll/pll_0002.v
+
+#ZXUno
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/ZXUno/seg_map_2MB.sv
+set_global_assignment -name VERILOG_FILE rtl/ZXUno/system_2MB.v
 
 #jtopl2
 set_global_assignment -name VERILOG_FILE rtl/jtopl2/hdl/jtopl_acc.v

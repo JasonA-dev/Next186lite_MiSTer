@@ -575,6 +575,7 @@ module system_2MB
 		//.irq_n()		
 	);
 	
+	/*
 	bootcore bootcore (
     .clk_icap(clk_cpu),   // WARNING: this clock must not be greater than 20MHz (50ns period)
     .coldreset(kbd_creset),
@@ -582,8 +583,9 @@ module system_2MB
 	 .corenn(CPU_DOUT[7:0]),	 
 	 .we(IORQ && CPU_CE && WR && ~WORD && PCXTCORENN),
 	 .coreset(coreset)
-   );	
-
+    );	
+	*/
+	
 	always @ (posedge clk_sdr) begin		
 		s_ddr_rd <= {s_ddr_rd[0], ddr_rd};
 		s_ddr_wr <= {s_ddr_wr[0], ddr_wr};

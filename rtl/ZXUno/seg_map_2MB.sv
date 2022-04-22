@@ -12,12 +12,12 @@ module seg_map_2MB(
 	 output f_map_to_f
     );
 	
-	reg [4:0]map[0:15] = {5'h00, 5'h01, 5'h02, 5'h03, 5'h04, 5'h05, 5'h06, 5'h07, 5'h08, 5'h09,
-								 5'h0a, 5'h0b,
-								 5'h0c, 5'h0d, 5'h0e, 5'h0f};	
+	reg [4:0] map[0:15] = '{ 5'h00, 5'h01, 5'h02, 5'h03, 5'h04, 5'h05, 5'h06, 5'h07, 5'h08, 5'h09,
+								  5'h0a, 5'h0b,
+								  5'h0c, 5'h0d, 5'h0e, 5'h0f };	
 
-	reg [5:0]map_ems[0:3] = {6'h00, 6'h00, 6'h00, 6'h00}; // Segment hE000, hE400, hE800, hEC00
-	reg ena_ems[0:3] = {1'b0, 1'b0, 1'b0, 1'b0}; // Enable Segment Map hE000, hE400, hE800, hEC00
+	reg [5:0] map_ems[0:3] = '{6'h00, 6'h00, 6'h00, 6'h00}; // Segment hE000, hE400, hE800, hEC00
+	reg ena_ems[0:3] = '{1'b0, 1'b0, 1'b0, 1'b0}; // Enable Segment Map hE000, hE400, hE800, hEC00
 
 	reg ems_enable = 1'b0;	
 	assign cpurdata = EMS_OE ? ena_ems[cpuaddr[1:0]] ? map_ems[cpuaddr[1:0]] : 8'hFF : {4'b00, map[cpuaddr]};
