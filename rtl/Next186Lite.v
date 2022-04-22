@@ -122,7 +122,7 @@ cos cos(vvc + {vc>>scandouble, 2'b00}, cos_out);
 assign video = (cos_g >= rnd_c) ? {cos_g - rnd_c, 2'b00} : 8'd0;
 
 
-	wire [5:0] r, g, b;	
+	//wire [5:0] r, g, b;	
 	reg [5:0] raux, gaux, baux;
 	wire [1:0] monochrome_switcher;
 	
@@ -157,12 +157,12 @@ assign video = (cos_g >= rnd_c) ? {cos_g - rnd_c, 2'b00} : 8'd0;
 		.clk_sram(clk_28_636), 		// i
 		.clk_25(clk_25),			// i
 		
-		.VGA_R(r),					// o 5
-		.VGA_G(g),					// o 5
-		.VGA_B(b),					// o 5
+		.VGA_R(VGA_R),					// o 5
+		.VGA_G(VGA_G),					// o 5
+		.VGA_B(VGA_B),					// o 5
 
-		.VGA_HSYNC(VGA_HSYNC),		// o
-		.VGA_VSYNC(VGA_VSYNC),		// o
+		.VGA_HSYNC(HSync),		// o
+		.VGA_VSYNC(VSync),		// o
 		.SRAM_ADDR(SRAM_A),			// o 20
 		.SRAM_DATA(SRAM_D),			// io 7
 		.SRAM_WE_n(SRAM_WE_n),		// o

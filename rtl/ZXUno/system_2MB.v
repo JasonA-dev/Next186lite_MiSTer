@@ -382,6 +382,7 @@ module system_2MB
 		
 	assign CPU_DIN	= s_cache_mreq ? DRAM_dout : CRTCVRAM ? vram_dout : bios_dout;
 	
+	// TODO replace with BRAM_8KN_BIOS.mif rom loader
 	BRAM_8KB_BIOS BIOS
 	(
 	  .clka(clk_cpu), // input clka
