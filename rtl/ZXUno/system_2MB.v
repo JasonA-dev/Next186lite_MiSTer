@@ -393,9 +393,9 @@ module system_2MB
 
 	);
 	*/		
-	rom #(.DW(32), .AW(13), .FN("rtl/ipcore/BRAM_8KB_BIOS.mif")) BIOS
+	rom #(.DW(32), .AW(14), .FN("rtl/ipcore/BRAM_8KB_BIOS.mif")) BIOS
 	(
-		.clock(clk_sys),
+		.clock(clk_cpu),
 		.ce(BIOSROM),		
 		.a(ADDR[12:2]),
 		.data_out(bios_dout)
