@@ -24,8 +24,8 @@ module Next186Lite
 	output wire [5:0]VGA_R,
 	output wire [5:0]VGA_G,
 	output wire [5:0]VGA_B,
-	output wire VGA_HSYNC,
-	output wire VGA_VSYNC,
+	//output wire VGA_HSYNC,
+	//output wire VGA_VSYNC,
 
 	output wire SRAM_WE_n,
 	output wire [20:0]SRAM_A,
@@ -54,6 +54,7 @@ module Next186Lite
 	input  wire P_tr	
 );
 
+/*
 reg   [9:0] hc;
 reg   [9:0] vc;
 reg   [9:0] vvc;
@@ -120,7 +121,7 @@ wire [5:0] cos_g = cos_out[7:3]+6'd32;
 cos cos(vvc + {vc>>scandouble, 2'b00}, cos_out);
 
 assign video = (cos_g >= rnd_c) ? {cos_g - rnd_c, 2'b00} : 8'd0;
-
+*/
 
 	//wire [5:0] r, g, b;	
 	reg [5:0] raux, gaux, baux;

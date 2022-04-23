@@ -287,9 +287,9 @@ pll pll
 (
 	.refclk(CLK_50M),
 	.rst(0),
-	.outclk_0(clk_sys),    // clk_28_636   	TODO set this
-    .outclk_1(clk_25),     // clk_25		TODO set this
-	.outclk_2(clk_14_318)  // clk_14_318	TODO set this
+	.outclk_0(clk_sys),    // clk_28_636 
+    .outclk_1(clk_25),     // clk_25		
+	.outclk_2(clk_14_318)  // clk_14_318	
 );
 
 wire reset = RESET | status[0] | buttons[1];
@@ -318,14 +318,14 @@ Next186Lite next186Lite
 	.pal(status[2]),
 	.scandouble(forced_scandoubler),
 
-	.ce_pix(ce_pix),
+	//.ce_pix(ce_pix),
 
 	.HBlank(HBlank),
-	.HSync(HSync),
+	.HSync(VGA_HS),
 	.VBlank(VBlank),
-	.VSync(VSync),
+	.VSync(VGA_VS),
 
-	.video(video),
+	//.video(video),
 
 // ZXUno_Next186lite_2MB_EXT
 	.CLK_50MHZ(CLK_50M),	// i
@@ -336,34 +336,34 @@ Next186Lite next186Lite
 	.VGA_R(VGA_R),  		// o 5:0
 	.VGA_G(VGA_G),  		// o 5:0
 	.VGA_B(VGA_B),  		// o 5:0
-	.VGA_HSYNC(VGA_HS),  	// o
-	.VGA_VSYNC(VGA_VS), 	// o
+	//.VGA_HSYNC(VGA_HS),  	// o
+	//.VGA_VSYNC(VGA_VS), 	// o
 
-	.SRAM_WE_n(), 	// o
-	.SRAM_A(), 		// o 20:0
-	.SRAM_D(), 		// io 7:0
+	.SRAM_WE_n(SDRAM_nWE), 	// o
+	.SRAM_A(SDRAM_A), 		// o 20:0  fix
+	.SRAM_D(SDRAM_DQ), 		// io 7:0  fix
 
-	.LED(), 		// o
+	//.LED(), 		// o
 
 	.AUDIO_L(AUDIO_L), 	// o
 	.AUDIO_R(AUDIO_R), 	// o
 
-	.PS2CLKA(), 	// io
-	.PS2CLKB(), 	// io
-	.PS2DATA(), 	// io
-	.PS2DATB(), 	// io
+	//.PS2CLKA(), 	// io
+	//.PS2CLKB(), 	// io
+	//.PS2DATA(), 	// io
+	//.PS2DATB(), 	// io
 
-	.SD_nCS(sd_cs), 		// o
-	.SD_DI(sd_sdi), 		// o
-	.SD_CK(sd_sck), 		// o
-	.SD_DO(sd_sdo), 		// i
+	.SD_nCS(SD_CS), 		// o
+	.SD_DI(SD_MOSI), 		// o
+	.SD_CK(SD_SCK), 		// o
+	.SD_DO(SD_MISO), 		// i
 
-	.P_A(), 		// i
-	.P_U(), 		// i
-	.P_D(), 		// i
-	.P_L(), 		// i
-	.P_R(), 		// i
-	.P_tr() 		// i	
+	//.P_A(joy_fire2), 		// i
+	//.P_U(joy_up), 		// i
+	//.P_D(joy_down), 		// i
+	//.P_L(joy_left), 		// i
+	//.P_R(joy_right), 		// i
+	//.P_tr(joy_fire1) 		// i	
 
 /*	system_2MB
 		.SRAM_ADDR(SRAM_A),
@@ -391,9 +391,9 @@ Next186Lite next186Lite
 );
 
 assign CLK_VIDEO = clk_sys;
-assign CE_PIXEL = ce_pix;
+assign CE_PIXEL = 1;
 
-assign VGA_DE = ~(HBlank | VBlank);
+//assign VGA_DE = ~(HBlank | VBlank);
 //assign VGA_HS = HSync;
 //assign VGA_VS = VSync;
 //assign VGA_G  = (!col || col == 2) ? video : 8'd0;
