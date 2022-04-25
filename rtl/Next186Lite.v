@@ -1,7 +1,6 @@
 
 module Next186Lite
 (
-	input         clk,
 	input         reset,
 	
 	input         pal,
@@ -14,9 +13,8 @@ module Next186Lite
 	output reg    VBlank,
 	output reg    VSync,
 
-	output  [7:0] video,
+	output  [3:0] video,
 
-	input  wire CLK_50MHZ,
 	input  wire clk_28_636,
 	input  wire clk_25,
 	input  wire clk_14_318,
@@ -24,8 +22,6 @@ module Next186Lite
 	output wire [5:0]VGA_R,
 	output wire [5:0]VGA_G,
 	output wire [5:0]VGA_B,
-	//output wire VGA_HSYNC,
-	//output wire VGA_VSYNC,
 
 	output wire SRAM_WE_n,
 	output wire [20:0]SRAM_A,
@@ -98,6 +94,8 @@ module Next186Lite
 
 		.HBlank(HBlank),			// o
 		.VBlank(VBlank),			// o
+
+		.video(video),				// o
 
 		.SRAM_ADDR(SRAM_A),			// o 20
 		.SRAM_DATA(SRAM_D),			// io 7

@@ -185,8 +185,6 @@ assign VGA_SCALER = 0;
 assign HDMI_FREEZE = 0;
 
 assign AUDIO_S = 0;
-//assign AUDIO_L = 0;
-//assign AUDIO_R = 0;
 assign AUDIO_MIX = 0;
 
 assign LED_DISK = 0;
@@ -287,7 +285,8 @@ wire HSync;
 wire VBlank;
 wire VSync;
 wire ce_pix;
-wire [7:0] video;
+
+wire [3:0] video;
 
 wire [31:0] sd_lba;
 wire        sd_rd;
@@ -296,13 +295,10 @@ wire        sd_ack;
 
 Next186Lite next186Lite
 (
-	.clk(clk_sys),
 	.reset(reset),
 	
 	.pal(status[2]),
 	.scandouble(forced_scandoubler),
-
-	//.ce_pix(ce_pix),
 
 	.HBlank(HBlank),
 	.HSync(VGA_HS),
@@ -312,16 +308,13 @@ Next186Lite next186Lite
 	.video(video),
 
 // ZXUno_Next186lite_2MB_EXT
-	.CLK_50MHZ(CLK_50M),	// i
 	.clk_28_636(clk_28_636),// i
 	.clk_25(clk_25),		// i
 	.clk_14_318(clk_14_318),// i
 
-	.VGA_R(VGA_R),  		// o 5:0
-	.VGA_G(VGA_G),  		// o 5:0
-	.VGA_B(VGA_B),  		// o 5:0
-	//.VGA_HSYNC(VGA_HS),  	// o
-	//.VGA_VSYNC(VGA_VS), 	// o
+	.VGA_R(VGA_R[5:0]),  		// o 5:0
+	.VGA_G(VGA_G[5:0]),  		// o 5:0
+	.VGA_B(VGA_B[5:0]),  		// o 5:0
 
 	.SRAM_WE_n(SDRAM_nWE), 	// o
 	.SRAM_A(SDRAM_A), 		// o 20:0  fix
@@ -352,25 +345,21 @@ Next186Lite next186Lite
 /*	system_2MB
 		.SRAM_ADDR(SRAM_A),
 		.SRAM_DATA(SRAM_D),
-		.SRAM_WE_n(SRAM_WE_n),		
+		.SRAM_WE_n(SRAM_WE_n),
+
 		.LED(LED),
+
 		.SD_n_CS(SD_nCS),
 		.SD_DI(SD_DI),
 		.SD_CK(SD_CK),
 		.SD_DO(SD_DO),
-		.AUD_L(AUDIO_L),
-		.AUD_R(AUDIO_R),
+
 	 	.PS2_CLK1(PS2CLKA),
 		.PS2_CLK2(PS2CLKB),
 		.PS2_DATA1(PS2DATA),
 		.PS2_DATA2(PS2DATB),
-		.monochrome_switcher(monochrome_switcher),		
-		.joy_up(P_U),
-		.joy_down(P_D),
-		.joy_left(P_L),
-		.joy_right(P_R),
-		.joy_fire1(P_tr),
-		.joy_fire2(P_A)
+
+		.monochrome_switcher(monochrome_switcher)		
 */
 );
 
@@ -378,11 +367,6 @@ assign CLK_VIDEO = clk_sys;
 assign CE_PIXEL = 1;
 
 assign VGA_DE = ~(HBlank | VBlank);
-//assign VGA_HS = HSync;
-//assign VGA_VS = VSync;
-//assign VGA_G  = (!col || col == 2) ? video : 8'd0;
-//assign VGA_R  = (!col || col == 1) ? video : 8'd0;
-//assign VGA_B  = (!col || col == 3) ? video : 8'd0;
 
 reg  [26:0] act_cnt;
 always @(posedge clk_sys) act_cnt <= act_cnt + 1'd1; 

@@ -136,6 +136,9 @@ module system_2MB
 		 output [20:0]SRAM_ADDR,
 		 inout [7:0]SRAM_DATA,
 		 output SRAM_WE_n,
+
+		 output wire [3:0]video,
+
 		 output wire [5:0]VGA_R,
 		 output wire [5:0]VGA_G,
 		 output wire [5:0]VGA_B,
@@ -303,7 +306,7 @@ module system_2MB
 
     wire[7:0] bus_out;
 
-    wire[3:0] video;
+    //wire[3:0] video;
     wire[3:0] vga_video;
 
     // wire composite_on;
@@ -390,8 +393,6 @@ module system_2MB
 		
 	assign CPU_DIN	= s_cache_mreq ? DRAM_dout : CRTCVRAM ? vram_dout : bios_dout;
 	
-	// TODO replace with BRAM_8KN_BIOS.mif rom loader
-	
 	/*
 	BRAM_8KB_BIOS BIOS
 	(
@@ -399,11 +400,10 @@ module system_2MB
 	  .ena(BIOSROM), // input ena	  
 	  .addra(ADDR[12:2]), // input [10 : 0] addra	  
 	  .douta(bios_dout) // output [31 : 0] douta
-
 	);
 	*/
 
-	rom #(.DW(128), .AW(12), .FN("rtl/ipcore/BRAM_8KB_BIOS.mif")) BIOS
+	rom #(.DW(128), .AW(11), .FN("rtl/ipcore/BRAM_8KB_BIOS.mif")) BIOS
 	(
 		.clock(clk_cpu),
 		.ce(BIOSROM),		
