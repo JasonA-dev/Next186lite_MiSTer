@@ -159,15 +159,15 @@ assign video = (cos_g >= rnd_c) ? {cos_g - rnd_c, 2'b00} : 8'd0;
 		.clk_sram(clk_28_636), 		// i
 		.clk_25(clk_25),			// i
 		
-		.VGA_R(VGA_R),					// o 5
-		.VGA_G(VGA_G),					// o 5
-		.VGA_B(VGA_B),					// o 5
+		.VGA_R(VGA_R),				// o 5
+		.VGA_G(VGA_G),				// o 5
+		.VGA_B(VGA_B),				// o 5
 
-		.VGA_HSYNC(HSync),		// o
-		.VGA_VSYNC(VSync),		// o
+		.VGA_HSYNC(HSync),			// o
+		.VGA_VSYNC(VSync),			// o
 
-		.HBlank(HBlank),	// o
-		.VBlank(VBlank),	// o
+		.HBlank(HBlank),			// o
+		.VBlank(VBlank),			// o
 
 		.SRAM_ADDR(SRAM_A),			// o 20
 		.SRAM_DATA(SRAM_D),			// io 7

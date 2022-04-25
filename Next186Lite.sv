@@ -309,7 +309,7 @@ Next186Lite next186Lite
 	.VBlank(VBlank),
 	.VSync(VGA_VS),
 
-	//.video(video),
+	.video(video),
 
 // ZXUno_Next186lite_2MB_EXT
 	.CLK_50MHZ(CLK_50M),	// i
