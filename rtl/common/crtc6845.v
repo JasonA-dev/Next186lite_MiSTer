@@ -25,6 +25,10 @@ module crtc6845(
     // Video control signals
     output hsync,
     output vsync,
+
+    output reg hdisp,
+    output reg vdisp,
+
     output display_enable,
     output cursor,
     output [13:0] mem_addr,
@@ -138,8 +142,9 @@ module crtc6845(
 
     reg vs = 1'b0;
     reg hs = 1'b0;
-    reg hdisp = 1'b1;
-    reg vdisp = 1'b1;
+
+    //assign hdisp = 1'b1;
+    //assign vdisp = 1'b1;
 
     wire cur_on;
     wire blink;

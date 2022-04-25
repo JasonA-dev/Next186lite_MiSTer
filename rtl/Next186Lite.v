@@ -64,6 +64,7 @@ wire [63:0] rnd;
 
 lfsr random(rnd);
 
+/*
 always @(posedge clk) begin
 	if(scandouble) ce_pix <= 1;
 		else ce_pix <= ~ce_pix;
@@ -120,7 +121,7 @@ wire [5:0] cos_g = cos_out[7:3]+6'd32;
 cos cos(vvc + {vc>>scandouble, 2'b00}, cos_out);
 
 assign video = (cos_g >= rnd_c) ? {cos_g - rnd_c, 2'b00} : 8'd0;
-
+*/
 
 	//wire [5:0] r, g, b;	
 	reg [5:0] raux, gaux, baux;
@@ -163,6 +164,10 @@ assign video = (cos_g >= rnd_c) ? {cos_g - rnd_c, 2'b00} : 8'd0;
 
 		.VGA_HSYNC(HSync),		// o
 		.VGA_VSYNC(VSync),		// o
+
+		.HBlank(HBlank),	// o
+		.VBlank(VBlank),	// o
+
 		.SRAM_ADDR(SRAM_A),			// o 20
 		.SRAM_DATA(SRAM_D),			// io 7
 		.SRAM_WE_n(SRAM_WE_n),		// o

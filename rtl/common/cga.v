@@ -33,6 +33,10 @@ module cga(
     output hsync,
     output dbl_hsync,
     output vsync,
+
+    output hdisp,
+    output vdisp,
+
     output[3:0] video,
     output[3:0] dbl_video,
     output[6:0] comp_video,
@@ -247,7 +251,7 @@ module cga(
         .divclk(crtc_clk),
         .cs(crtc_cs),
         .a0(bus_a[0]),
-		  .word(word),
+		.word(word),
         .write(~bus_iow_synced_l),
         .read(~bus_ior_synced_l),
         .bus(bus_d),
@@ -255,6 +259,11 @@ module cga(
         .lock(1'b0),
         .hsync(hsync_int),
         .vsync(vsync_l),
+
+        // blanks
+        .hdisp(hdisp),
+        .vdisp(vdisp),
+
         .display_enable(display_enable),
         .cursor(cursor),
         .mem_addr(crtc_addr),

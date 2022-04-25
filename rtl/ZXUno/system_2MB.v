@@ -141,6 +141,10 @@ module system_2MB
 		 output wire [5:0]VGA_B,
 		 output wire VGA_HSYNC,
 		 output wire VGA_VSYNC,		 
+
+		 output wire HBlank,
+		 output wire VBlank,
+
 		 output LED,
 		 output reg SD_n_CS = 1,
 		 output wire SD_DI,
@@ -326,12 +330,12 @@ module system_2MB
 
     cga cga1 (
         .clk(clk_vga),        
-		  .bus_a(PORT_ADDR),        
-		  .bus_ior_l(WR),
+		.bus_a(PORT_ADDR),        
+		.bus_ior_l(WR),
         .bus_iow_l(~WR),
         .bus_memr_l(1'd0),
         .bus_memw_l(1'd0),
-		  .word(WORD),
+		.word(WORD),
         .bus_d(CPU_DOUT),
         .bus_out(CRTC_DOUT),
         .bus_dir(CRTC_OE),
@@ -341,6 +345,10 @@ module system_2MB
         .ram_d(VRAM8_DOUT),        
         .dbl_hsync(VGA_HSYNC),
         .vsync(VGA_VSYNC),
+
+		.hdisp(HBlank),
+		.vdisp(VBlank),
+
         .video(video),
         .dbl_video(vga_video),
         .comp_video(comp_video),
