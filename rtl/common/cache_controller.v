@@ -117,6 +117,7 @@ module cache_controller(
 		ddr_dout <= lowaddr[0] ? cache_QA[15:0] : cache_QA[31:16];
 	end
 	
+	/*
 	cache cache_mem (
 	  .clka(ddr_clk), // input clka
 	  .ena(cache_write_data | cache_read_data),
@@ -124,6 +125,7 @@ module cache_controller(
 	  .addra({blk, lowaddr[6:1]}), // input [8 : 0] addra
 	  .dina({ddr_din, ddr_din}), // input [31 : 0] dina
 	  .douta(cache_QA), // output [31 : 0] douta
+
 	  .clkb(clk), // input clkb
 	  .enb(mreq & hit & st0),
 	  .web({4{mreq & hit & st0 & wr}} & wmask),
@@ -131,7 +133,28 @@ module cache_controller(
 	  .dinb(din), // input [31 : 0] dinb
 	  .doutb(dout) // output [31 : 0] doutb
 	);
+	*/
 	
+	bram cache_mem
+	(
+    // Port A
+    .clock_a(ddr_clk), 				
+    .wren_a({4{cache_write_data}} & {lowaddr[0], lowaddr[0], ~lowaddr[0], ~lowaddr[0]}),
+    .address_a({blk, lowaddr[6:1]}), 		
+    .data_a({ddr_din, ddr_din}),
+    .q_a(cache_QA), 				
+     
+    // Port B
+    .clock_b(clk), 				
+    .wren_b({4{mreq & hit & st0 & wr}} & wmask),
+    .address_b({blk, addr[7:2]}), 	
+    .data_b(din),
+    .q_b(dout), 				
+
+    .byteena_a(cache_write_data | cache_read_data), 			
+    .byteena_b(mreq & hit & st0)
+
+	);
 	
 	always @(cache0, cache1, cache2, cache3, cache4, cache5, cache6, cache7) begin
 		dirty = 1'bx;
