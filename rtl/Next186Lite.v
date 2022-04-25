@@ -24,8 +24,8 @@ module Next186Lite
 	output wire [5:0]VGA_R,
 	output wire [5:0]VGA_G,
 	output wire [5:0]VGA_B,
-	output wire VGA_HSYNC,
-	output wire VGA_VSYNC,
+	//output wire VGA_HSYNC,
+	//output wire VGA_VSYNC,
 
 	output wire SRAM_WE_n,
 	output wire [20:0]SRAM_A,
@@ -54,6 +54,7 @@ module Next186Lite
 	input  wire P_tr	
 );
 
+/*
 reg   [9:0] hc;
 reg   [9:0] vc;
 reg   [9:0] vvc;

@@ -3,6 +3,7 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/cos.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/Next186Lite.v
 set_global_assignment -name SDC_FILE Next186Lite.sdc
 set_global_assignment -name SYSTEMVERILOG_FILE Next186Lite.sv
+set_global_assignment -name VERILOG_FILE rtl/rom.v
 
 #common
 set_global_assignment -name VERILOG_FILE rtl/common/cache_controller.v
