@@ -377,7 +377,7 @@ Next186Lite next186Lite
 assign CLK_VIDEO = clk_sys;
 assign CE_PIXEL = 1;
 
-//assign VGA_DE = ~(HBlank | VBlank);
+assign VGA_DE = ~(HBlank | VBlank);
 //assign VGA_HS = HSync;
 //assign VGA_VS = VSync;
 //assign VGA_G  = (!col || col == 2) ? video : 8'd0;

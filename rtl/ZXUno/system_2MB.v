@@ -391,7 +391,7 @@ module system_2MB
 	assign CPU_DIN	= s_cache_mreq ? DRAM_dout : CRTCVRAM ? vram_dout : bios_dout;
 	
 	// TODO replace with BRAM_8KN_BIOS.mif rom loader
-	/*
+	
 	BRAM_8KB_BIOS BIOS
 	(
 	  .clka(clk_cpu), // input clka
@@ -400,15 +400,15 @@ module system_2MB
 	  .douta(bios_dout) // output [31 : 0] douta
 
 	);
-	*/		
-	rom #(.DW(128), .AW(11), .FN("rtl/ipcore/BRAM_8KB_BIOS.mif")) BIOS
+	/*		
+	rom #(.DW(128), .AW(12), .FN("rtl/ipcore/BRAM_8KB_BIOS.mif")) BIOS
 	(
 		.clock(clk_cpu),
 		.ce(BIOSROM),		
 		.a(ADDR[12:2]),
 		.data_out(bios_dout)
 	);
-
+*/
 	
 	BRAM_32KB_CRTC VRAM
 	(
@@ -426,8 +426,8 @@ module system_2MB
 	  .doutb(VRAM8_DOUT) // output [7 : 0] doutb  
 
 	);
-
-	/*	
+	
+	/*
 	bram #(.widthad_a(15), .width_a(32)) VRAM
 	(
     // Port A
@@ -447,8 +447,8 @@ module system_2MB
     .byteena_a(CRTCVRAM), 			// input ena
     .byteena_b(VRAM8_ENABLE)
 	);
-	*/
-
+	
+*/
 	always @ (posedge clk_cpu_base)
 		div_clk_cpu <= div_clk_cpu + 3'd1;	
 

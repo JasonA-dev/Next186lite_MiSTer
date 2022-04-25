@@ -220,9 +220,9 @@ module cga(
     assign bw_mode = cga_control_reg[2]; // 1=b&w, 0=color
 
     //if (NO_DISPLAY_DISABLE == 1) begin
-        assign video_enabled = 1;
+    //    assign video_enabled = 1;
     //end else begin
-    //    assign video_enabled = cga_control_reg[3];
+        assign video_enabled = cga_control_reg[3];
     //end
 
     assign mode_640 = cga_control_reg[4]; // 1=640x200 mode, 0=others
