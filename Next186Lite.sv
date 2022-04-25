@@ -179,6 +179,7 @@ assign {SD_SCK, SD_MOSI, SD_CS} = 'Z;
 assign {SDRAM_DQ, SDRAM_A, SDRAM_BA, SDRAM_CLK, SDRAM_CKE, SDRAM_DQML, SDRAM_DQMH, SDRAM_nWE, SDRAM_nCAS, SDRAM_nRAS, SDRAM_nCS} = 'Z;
 assign {DDRAM_CLK, DDRAM_BURSTCNT, DDRAM_ADDR, DDRAM_DIN, DDRAM_BE, DDRAM_RD, DDRAM_WE} = '0;  
 
+assign VGA_SL = 0;
 assign VGA_F1 = 0;
 assign VGA_SCALER = 0;
 assign HDMI_FREEZE = 0;
@@ -202,9 +203,10 @@ localparam CONF_STR = {
 	"Next186Lite;;",
 	"-;",
 	"O89,Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
-	"O35,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%,CRT 75%;", 
 	"O2,TV Mode,NTSC,PAL;",
+	"O34,Noise,White,Red,Green,Blue;",
 	"-;",
+	"T0,Reset;",
 	"R0,Reset and close OSD;",
 	"V,v",`BUILD_DATE 
 };
@@ -213,8 +215,6 @@ wire forced_scandoubler;
 wire  [1:0] buttons;
 wire [31:0] status;
 wire [10:0] ps2_key;
-
-wire [21:0] gamma_bus;
 
 wire  [7:0] joystick_0;
 wire  [7:0] joystick_1;
@@ -278,48 +278,15 @@ wire reset = RESET | status[0] | buttons[1];
 
 //////////////////////////////////////////////////////////////////
 
+wire [1:0] col = status[4:3];
+
 wire HBlank;
 wire HSync;
 wire VBlank;
 wire VSync;
 wire ce_pix;
-wire freeze_sync;
 
-always @(posedge clk_25) begin
-    reg [1:0] div;
-    div <= div + 1'd1;
-    ce_pix <= !div;
-end
-
-wire [3:0] pix_clk;
-wire [5:0] r,g,b;
-
-wire [2:0] scale = status[5:3];
-wire [2:0] sl = scale ? scale - 1'd1 : 3'd0;
-wire       scandoubler = (scale || forced_scandoubler);
-
-assign VGA_SL = sl[1:0];
-
-video_mixer #(.GAMMA(1)) video_mixer
-(
-	.*,
-
-	.CLK_VIDEO(clk_sys),
-	.ce_pix(pix_clk),
-
-	.hq2x(scale==1),
-
-
-	.R(r),
-	.G(g),
-	.B(b),
-
-	// Positive pulses.
-	.HSync(HSync),
-	.VSync(VSync),
-	.HBlank(HBlank),
-	.VBlank(VBlank)
-);
+wire [3:0] video;
 
 wire [31:0] sd_lba;
 wire        sd_rd;
@@ -334,20 +301,20 @@ Next186Lite next186Lite
 	.scandouble(forced_scandoubler),
 
 	.HBlank(HBlank),
-	.HSync(HSync),
+	.HSync(VGA_HS),
 	.VBlank(VBlank),
-	.VSync(VSync),
+	.VSync(VGA_VS),
 
-	.video(pix_clk),
+	.video(video),
 
 // ZXUno_Next186lite_2MB_EXT
 	.clk_28_636(clk_28_636),// i
 	.clk_25(clk_25),		// i
 	.clk_14_318(clk_14_318),// i
 
-	.VGA_R(r),  		// o 5:0
-	.VGA_G(g),  		// o 5:0
-	.VGA_B(b),  		// o 5:0
+	.VGA_R(VGA_R[5:0]),  		// o 5:0
+	.VGA_G(VGA_G[5:0]),  		// o 5:0
+	.VGA_B(VGA_B[5:0]),  		// o 5:0
 
 	.SRAM_WE_n(SDRAM_nWE), 	// o
 	.SRAM_A(SDRAM_A), 		// o 20:0  fix
@@ -395,6 +362,11 @@ Next186Lite next186Lite
 		.monochrome_switcher(monochrome_switcher)		
 */
 );
+
+assign CLK_VIDEO = clk_sys;
+assign CE_PIXEL = 1;
+
+assign VGA_DE = ~(HBlank | VBlank);
 
 reg  [26:0] act_cnt;
 always @(posedge clk_sys) act_cnt <= act_cnt + 1'd1; 

@@ -24,14 +24,14 @@ module  pll_0002(
 		.fractional_vco_multiplier("false"),
 		.reference_clock_frequency("50.0 MHz"),
 		.operation_mode("direct"),
-		.number_of_clocks(3),
-		.output_clock_frequency0("28.000000 MHz"),
+		.number_of_clocks(1),
+		.output_clock_frequency0("28.636000 MHz"),	// clk_28_636 
 		.phase_shift0("0 ps"),
 		.duty_cycle0(50),
-		.output_clock_frequency1("25.000000 MHz"),
+		.output_clock_frequency1("25 MHz"),			// clk_25
 		.phase_shift1("0 ps"),
 		.duty_cycle1(50),
-		.output_clock_frequency2("14.000000 MHz"),
+		.output_clock_frequency2("14.318000 MHz"),	// clk_14_318
 		.phase_shift2("0 ps"),
 		.duty_cycle2(50),
 		.output_clock_frequency3("0 MHz"),
