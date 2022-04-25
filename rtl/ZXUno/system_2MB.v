@@ -137,7 +137,7 @@ module system_2MB
 		 inout [7:0]SRAM_DATA,
 		 output SRAM_WE_n,
 
-		 output wire [3:0]video,
+		 //output wire [3:0]video,
 
 		 output wire [5:0]VGA_R,
 		 output wire [5:0]VGA_G,
@@ -302,11 +302,11 @@ module system_2MB
     // Sets up the card to generate a video signal
     // that will work with a standard VGA monitor
     // connected to the VGA port.
-    parameter MDA_70HZ = 0;    
+    parameter MDA_70HZ = 1;    // was 0
 
     wire[7:0] bus_out;
 
-    //wire[3:0] video;
+    wire[3:0] video;
     wire[3:0] vga_video;
 
     // wire composite_on;
@@ -325,7 +325,8 @@ module system_2MB
     // CGA digital to analog converter
     cga_vgaport vga (
         .clk(clk_vga),
-        .video(vga_video),		  
+        //.video(vga_video),		
+		.video(video),		
         .red(VGA_R),
         .green(VGA_G),
         .blue(VGA_B)
@@ -345,8 +346,10 @@ module system_2MB
         .bus_aen(~(IORQ & CPU_CE)),        
         .ram_we_l(VRAM8_ENABLE),
         .ram_a(VRAM8_ADDR),
-        .ram_d(VRAM8_DOUT),        
-        .dbl_hsync(VGA_HSYNC),
+        .ram_d(VRAM8_DOUT),   
+
+        .hsync(VGA_HSYNC),		     
+        //.dbl_hsync(VGA_HSYNC),
         .vsync(VGA_VSYNC),
 
 		.hdisp(HBlank),

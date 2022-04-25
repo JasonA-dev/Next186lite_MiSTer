@@ -24,7 +24,7 @@ module  pll_0002(
 		.fractional_vco_multiplier("false"),
 		.reference_clock_frequency("50.0 MHz"),
 		.operation_mode("direct"),
-		.number_of_clocks(1),
+		.number_of_clocks(3),
 		.output_clock_frequency0("28.636000 MHz"),	// clk_28_636 
 		.phase_shift0("0 ps"),
 		.duty_cycle0(50),

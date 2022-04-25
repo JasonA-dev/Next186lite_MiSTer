@@ -13,7 +13,7 @@ module Next186Lite
 	output reg    VBlank,
 	output reg    VSync,
 
-	output  [3:0] video,
+	//output  [3:0] video,
 
 	input  wire clk_28_636,
 	input  wire clk_25,
@@ -95,7 +95,7 @@ module Next186Lite
 		.HBlank(HBlank),			// o
 		.VBlank(VBlank),			// o
 
-		.video(video),				// o
+		//.video(video),				// o
 
 		.SRAM_ADDR(SRAM_A),			// o 20
 		.SRAM_DATA(SRAM_D),			// io 7

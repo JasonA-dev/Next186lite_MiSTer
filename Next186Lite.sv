@@ -305,7 +305,7 @@ Next186Lite next186Lite
 	.VBlank(VBlank),
 	.VSync(VGA_VS),
 
-	.video(video),
+	//.video(video),
 
 // ZXUno_Next186lite_2MB_EXT
 	.clk_28_636(clk_28_636),// i
@@ -316,9 +316,9 @@ Next186Lite next186Lite
 	.VGA_G(VGA_G[5:0]),  		// o 5:0
 	.VGA_B(VGA_B[5:0]),  		// o 5:0
 
-	.SRAM_WE_n(SDRAM_nWE), 	// o
-	.SRAM_A(SDRAM_A), 		// o 20:0  fix
-	.SRAM_D(SDRAM_DQ), 		// io 7:0  fix
+	//.SRAM_WE_n(SDRAM_nWE), 	// o
+	//.SRAM_A(SDRAM_A), 		// o 20:0  fix
+	//.SRAM_D(SDRAM_DQ), 		// io 7:0  fix
 
 	//.LED(), 		// o
 

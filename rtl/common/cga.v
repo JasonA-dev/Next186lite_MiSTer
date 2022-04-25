@@ -44,7 +44,7 @@ module cga(
     input thin_font
     );
 
-    parameter MDA_70HZ = 0;
+    parameter MDA_70HZ = 1;
     parameter BLINK_MAX = 0;
     // `define CGA_SNOW = 1; No snow
 
@@ -65,7 +65,7 @@ module cga(
     wire[7:0] bus_out_mem;
     wire[7:0] cga_status_reg;
     //reg[7:0] cga_control_reg = 8'b0010_1000; // (TEXT)
-	 reg[7:0] cga_control_reg = 8'b0010_1010; // (GFX 320 x 200)
+	reg[7:0] cga_control_reg = 8'b0010_1010; // (GFX 320 x 200)
     reg[7:0] cga_color_reg = 8'b0000_0000;
     wire hres_mode;
     wire grph_mode;
@@ -220,9 +220,9 @@ module cga(
     assign bw_mode = cga_control_reg[2]; // 1=b&w, 0=color
 
     //if (NO_DISPLAY_DISABLE == 1) begin
-    //    assign video_enabled = 1;
+        assign video_enabled = 1;
     //end else begin
-        assign video_enabled = cga_control_reg[3];
+   //     assign video_enabled = cga_control_reg[3];
     //end
 
     assign mode_640 = cga_control_reg[4]; // 1=640x200 mode, 0=others
