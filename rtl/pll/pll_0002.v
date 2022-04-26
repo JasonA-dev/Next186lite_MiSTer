@@ -25,13 +25,13 @@ module  pll_0002(
 		.reference_clock_frequency("50.0 MHz"),
 		.operation_mode("direct"),
 		.number_of_clocks(3),
-		.output_clock_frequency0("28.636000 MHz"),	// clk_28_636 
+		.output_clock_frequency0("28.636000 MHz"),	// clk_28_636 => 25.175
 		.phase_shift0("0 ps"),
 		.duty_cycle0(50),
 		.output_clock_frequency1("25 MHz"),			// clk_25
 		.phase_shift1("0 ps"),
 		.duty_cycle1(50),
-		.output_clock_frequency2("14.318000 MHz"),	// clk_14_318
+		.output_clock_frequency2("14.318000 MHz"),	// clk_14_318  => 12.5875
 		.phase_shift2("0 ps"),
 		.duty_cycle2(50),
 		.output_clock_frequency3("0 MHz"),

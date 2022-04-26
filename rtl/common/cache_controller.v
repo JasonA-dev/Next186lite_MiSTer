@@ -135,7 +135,7 @@ module cache_controller(
 	);
 	*/
 	
-	bram cache_mem
+	bramvram cache_mem
 	(
     // Port A
     .clock_a(ddr_clk), 				

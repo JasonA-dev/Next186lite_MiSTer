@@ -64,8 +64,8 @@ module cga(
     wire[7:0] bus_out_crtc;
     wire[7:0] bus_out_mem;
     wire[7:0] cga_status_reg;
-    //reg[7:0] cga_control_reg = 8'b0010_1000; // (TEXT)
-	reg[7:0] cga_control_reg = 8'b0010_1010; // (GFX 320 x 200)
+    reg[7:0] cga_control_reg = 8'b0010_1000; // (TEXT)
+	//reg[7:0] cga_control_reg = 8'b0010_1010; // (GFX 320 x 200)
     reg[7:0] cga_color_reg = 8'b0000_0000;
     wire hres_mode;
     wire grph_mode;

@@ -1,5 +1,5 @@
 
-module Next186Lite
+module next186
 (
 	input         reset,
 	
@@ -50,32 +50,32 @@ module Next186Lite
 	input  wire P_tr	
 );
 
-/*
-	//wire [5:0] r, g, b;	
+
+	wire [5:0] r, g, b;	
 	reg [5:0] raux, gaux, baux;
 	wire [1:0] monochrome_switcher;
 	
-	reg [5:0]red_weight[0:63] = { // 0.2126*R
+	reg [5:0]red_weight[0:63] = '{ // 0.2126*R
 	6'h00, 6'h01, 6'h01, 6'h01, 6'h01, 6'h02, 6'h02, 6'h02, 6'h02, 6'h02, 6'h03, 6'h03, 6'h03, 6'h03, 6'h03, 6'h04,
 	6'h04, 6'h04, 6'h04, 6'h05, 6'h05, 6'h05, 6'h05, 6'h05, 6'h06, 6'h06, 6'h06, 6'h06, 6'h06, 6'h07, 6'h07, 6'h07,
 	6'h07, 6'h08, 6'h08, 6'h08, 6'h08, 6'h08, 6'h09, 6'h09, 6'h09, 6'h09, 6'h09, 6'h0a, 6'h0a, 6'h0a, 6'h0a, 6'h0a,
 	6'h0b, 6'h0b, 6'h0b, 6'h0b, 6'h0c, 6'h0c, 6'h0c, 6'h0c, 6'h0c, 6'h0d, 6'h0d, 6'h0d, 6'h0d, 6'h0d, 6'h0e, 6'h0e
 	};
 	
-	reg [5:0]green_weight[0:63] = { // 0.7152*G
+	reg [5:0]green_weight[0:63] = '{ // 0.7152*G
 	6'h00, 6'h01, 6'h02, 6'h03, 6'h03, 6'h04, 6'h05, 6'h06, 6'h06, 6'h07, 6'h08, 6'h08, 6'h09, 6'h0a, 6'h0b, 6'h0b,
 	6'h0c, 6'h0d, 6'h0d, 6'h0e, 6'h0f, 6'h10, 6'h10, 6'h11, 6'h12, 6'h12, 6'h13, 6'h14, 6'h15, 6'h15, 6'h16, 6'h17,
 	6'h17, 6'h18, 6'h19, 6'h1a, 6'h1a, 6'h1b, 6'h1c, 6'h1c, 6'h1d, 6'h1e, 6'h1f, 6'h1f, 6'h20, 6'h21, 6'h21, 6'h22,
 	6'h23, 6'h24, 6'h24, 6'h25, 6'h26, 6'h26, 6'h27, 6'h28, 6'h29, 6'h29, 6'h2a, 6'h2a, 6'h2a, 6'h2b, 6'h2b, 6'h2b
 	};
 	
-	reg [5:0]blue_weight[0:63] = { // 0.0722*B
+	reg [5:0]blue_weight[0:63] = '{ // 0.0722*B
 	6'h00, 6'h01, 6'h01, 6'h01, 6'h01, 6'h01, 6'h01, 6'h01, 6'h01, 6'h01, 6'h01, 6'h01, 6'h01, 6'h01, 6'h02, 6'h02,
 	6'h02, 6'h02, 6'h02, 6'h02, 6'h02, 6'h02, 6'h02, 6'h02, 6'h02, 6'h02, 6'h02, 6'h02, 6'h03, 6'h03, 6'h03, 6'h03,
 	6'h03, 6'h03, 6'h03, 6'h03, 6'h03, 6'h03, 6'h03, 6'h03, 6'h03, 6'h03, 6'h04, 6'h04, 6'h04, 6'h04, 6'h04, 6'h04,
 	6'h04, 6'h04, 6'h04, 6'h04, 6'h04, 6'h04, 6'h04, 6'h04, 6'h05, 6'h05, 6'h05, 6'h05, 6'h05, 6'h05, 6'h05, 6'h05
 	};
-*/
+
 
 	system_2MB sys_inst
 	(	
@@ -85,9 +85,9 @@ module Next186Lite
 		.clk_sram(clk_28_636), 		// i
 		.clk_25(clk_25),			// i
 		
-		.VGA_R(VGA_R),				// o 5
-		.VGA_G(VGA_G),				// o 5
-		.VGA_B(VGA_B),				// o 5
+		.VGA_R(r),				// o 5
+		.VGA_G(g),				// o 5
+		.VGA_B(b),				// o 5
 
 		.VGA_HSYNC(HSync),			// o
 		.VGA_VSYNC(VSync),			// o
@@ -126,7 +126,7 @@ module Next186Lite
 		.joy_fire2(P_A)				// i
 );
 
-/*
+
 	always @ (monochrome_switcher, r, g, b) begin
 		case(monochrome_switcher)
 			// Verde
@@ -159,6 +159,6 @@ module Next186Lite
 	assign VGA_R = raux[5:3];
 	assign VGA_G = gaux[5:3];
 	assign VGA_B = baux[5:3];
-*/
+
 
 endmodule

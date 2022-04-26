@@ -325,8 +325,8 @@ module system_2MB
     // CGA digital to analog converter
     cga_vgaport vga (
         .clk(clk_vga),
-        //.video(vga_video),		
-		.video(video),		
+        .video(vga_video),		
+		//.video(video),		
         .red(VGA_R),
         .green(VGA_G),
         .blue(VGA_B)
@@ -348,8 +348,8 @@ module system_2MB
         .ram_a(VRAM8_ADDR),
         .ram_d(VRAM8_DOUT),   
 
-        .hsync(VGA_HSYNC),		     
-        //.dbl_hsync(VGA_HSYNC),
+        //.hsync(VGA_HSYNC),		     
+        .dbl_hsync(VGA_HSYNC),
         .vsync(VGA_VSYNC),
 
 		.hdisp(HBlank),
@@ -406,7 +406,7 @@ module system_2MB
 	);
 	*/
 
-	rom #(.DW(128), .AW(11), .FN("rtl/ipcore/BRAM_8KB_BIOS.mif")) BIOS
+	rom #(.DW(32), .AW(11), .FN("rtl/ipcore/BRAM_8KB_BIOS.mif")) BIOS
 	(
 		.clock(clk_cpu),
 		.ce(BIOSROM),		

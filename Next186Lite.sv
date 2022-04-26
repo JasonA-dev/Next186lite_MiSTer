@@ -179,7 +179,6 @@ assign {SD_SCK, SD_MOSI, SD_CS} = 'Z;
 assign {SDRAM_DQ, SDRAM_A, SDRAM_BA, SDRAM_CLK, SDRAM_CKE, SDRAM_DQML, SDRAM_DQMH, SDRAM_nWE, SDRAM_nCAS, SDRAM_nRAS, SDRAM_nCS} = 'Z;
 assign {DDRAM_CLK, DDRAM_BURSTCNT, DDRAM_ADDR, DDRAM_DIN, DDRAM_BE, DDRAM_RD, DDRAM_WE} = '0;  
 
-assign VGA_SL = 0;
 assign VGA_F1 = 0;
 assign VGA_SCALER = 0;
 assign HDMI_FREEZE = 0;
@@ -193,18 +192,22 @@ assign BUTTONS = 0;
 
 //////////////////////////////////////////////////////////////////
 
-wire [1:0] ar = status[9:8];
+//wire [1:0] ar = status[9:8];
 
-assign VIDEO_ARX = (!ar) ? 12'd4 : (ar - 1'd1);
-assign VIDEO_ARY = (!ar) ? 12'd3 : 12'd0;
+assign VIDEO_ARX = status[5] ? 8'd16 : 8'd4; 
+assign VIDEO_ARY = status[5] ? 8'd9  : 8'd3; 
+
+wire [1:0] scale = status[2:1];
+assign VGA_SL = scale ; //{scale == 3, scale == 2};
 
 `include "build_id.v" 
 localparam CONF_STR = {
 	"Next186Lite;;",
 	"-;",
-	"O89,Aspect ratio,Original,Full Screen,[ARC1],[ARC2];",
-	"O2,TV Mode,NTSC,PAL;",
-	"O34,Noise,White,Red,Green,Blue;",
+	"O5,Aspect ratio,4:3,16:9;",
+	"O12,Scandoubler Fx,None,HQ2x,CRT 25%,CRT 50%;",	
+	//"O2,TV Mode,NTSC,PAL;",
+	//"O34,Noise,White,Red,Green,Blue;",
 	"-;",
 	"T0,Reset;",
 	"R0,Reset and close OSD;",
@@ -229,12 +232,14 @@ wire        ioctl_wait;
 wire        ps2_kbd_hps_clk_in, ps2_kbd_hps_clk_out;
 wire        ps2_kbd_hps_data_in, ps2_kbd_hps_data_out;
 
+wire [21:0] gamma_bus;
+
 hps_io #(.CONF_STR(CONF_STR)) hps_io
 (
 	.clk_sys(clk_sys),
 	.HPS_BUS(HPS_BUS),
 	.EXT_BUS(),
-	.gamma_bus(),
+	.gamma_bus(gamma_bus),
 
 	.forced_scandoubler(forced_scandoubler),
 
@@ -264,36 +269,42 @@ hps_io #(.CONF_STR(CONF_STR)) hps_io
 
 wire clk_sys, clk_25, clk_14_318, clk_28_636;
 assign clk_28_636 = clk_sys;
+wire pll_locked;
 
 pll pll
 (
 	.refclk(CLK_50M),
 	.rst(0),
-	.outclk_0(clk_sys),    // clk_28_636 
+	.outclk_0(clk_sys),    // clk_28_636   => 25.175
     .outclk_1(clk_25),     // clk_25		
-	.outclk_2(clk_14_318)  // clk_14_318	
+	.outclk_2(clk_14_318), // clk_14_318	
+	.locked (pll_locked)	
 );
 
-wire reset = RESET | status[0] | buttons[1];
+reg reset;
+
+always @(posedge clk_sys) begin
+	reset <= (!pll_locked | status[0] | buttons[1] | RESET);
+end
 
 //////////////////////////////////////////////////////////////////
 
-wire [1:0] col = status[4:3];
+//wire [1:0] col = status[4:3];
 
 wire HBlank;
 wire HSync;
 wire VBlank;
 wire VSync;
-wire ce_pix;
+//wire ce_pix;
 
-wire [3:0] video;
+//wire [3:0] video;
 
 wire [31:0] sd_lba;
 wire        sd_rd;
 wire        sd_wr;
 wire        sd_ack;
 
-Next186Lite next186Lite
+next186 next186Lite
 (
 	.reset(reset),
 	
@@ -301,9 +312,9 @@ Next186Lite next186Lite
 	.scandouble(forced_scandoubler),
 
 	.HBlank(HBlank),
-	.HSync(VGA_HS),
+	.HSync(HSync),
 	.VBlank(VBlank),
-	.VSync(VGA_VS),
+	.VSync(VSync),
 
 	//.video(video),
 
@@ -312,9 +323,9 @@ Next186Lite next186Lite
 	.clk_25(clk_25),		// i
 	.clk_14_318(clk_14_318),// i
 
-	.VGA_R(VGA_R[5:0]),  		// o 5:0
-	.VGA_G(VGA_G[5:0]),  		// o 5:0
-	.VGA_B(VGA_B[5:0]),  		// o 5:0
+	.VGA_R(r),  		// o 5:0
+	.VGA_G(g),  		// o 5:0
+	.VGA_B(b),  		// o 5:0
 
 	//.SRAM_WE_n(SDRAM_nWE), 	// o
 	//.SRAM_A(SDRAM_A), 		// o 20:0  fix
@@ -364,12 +375,30 @@ Next186Lite next186Lite
 );
 
 assign CLK_VIDEO = clk_sys;
-assign CE_PIXEL = 1;
+reg ce_pix = 1;
 
-assign VGA_DE = ~(HBlank | VBlank);
+//assign VGA_DE = ~(HBlank | VBlank);
 
 reg  [26:0] act_cnt;
 always @(posedge clk_sys) act_cnt <= act_cnt + 1'd1; 
 assign LED_USER    = act_cnt[26]  ? act_cnt[25:18]  > act_cnt[7:0]  : act_cnt[25:18]  <= act_cnt[7:0];
+
+wire [5:0] r;
+wire [5:0] g;
+wire [5:0] b;
+wire freeze_sync;
+
+video_mixer #(448, 1) mixer
+(
+	.*,
+
+        .hq2x(scale == 1),
+        .scandoubler (scale || forced_scandoubler),
+
+        .R({r[5:0],r[5]}), 
+        .G({g[5:0],g[5]}), 
+        .B({b[5:0],b[5]}),
+
+);
 
 endmodule

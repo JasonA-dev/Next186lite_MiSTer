@@ -234,7 +234,7 @@ module crtc6845(
             // Vertical sync pulse is fixed at 16 scan line times
             // Vsync pulse turns off after 16 lines
             if (vs) begin
-                if (v_synccount == 6'd37) begin // 15
+                if (v_synccount == 6'd15) begin // 15  was 37
                     v_synccount <= 6'd0;
                     vs <= 0;
                 end else begin
