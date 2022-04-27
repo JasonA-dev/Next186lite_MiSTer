@@ -79,7 +79,7 @@ module next186
 
 	system_2MB sys_inst
 	(	
-		.clk_vga(clk_14_318),		// i clk_28_636
+		.clk_vga(clk_28_636),		// i clk_28_636
 		.clk_cpu_base(clk_14_318),	// i
 		.clk_sdr(clk_14_318), 		// i
 		.clk_sram(clk_28_636), 		// i

@@ -26,7 +26,8 @@ module cga_vram(
 
     // Lines to RAM pins
     output reg[18:0] ram_a,
-    inout[7:0] ram_d,
+    input[7:0] ram_din,    
+    output[7:0] ram_d,
     output ram_ce_l,
     output ram_oe_l,
     output ram_we_l
@@ -48,7 +49,7 @@ module cga_vram(
     // Gated by clock so that we give the SRAM chip
     // some time to tristate its data output after
     // we begin the write operation. (tHZWE)
-    assign ram_d = (~ram_we_l & ~clk) ? ram_write_data : 8'hZZ;
+    //assign ram_d = (~ram_we_l & ~clk) ? ram_write_data : 8'hZZ;
 
     // RAM address pin mux
     always @ (*)

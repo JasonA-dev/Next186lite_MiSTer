@@ -345,29 +345,19 @@ next186 next186Lite
 	//.PS2DATB(), 	// io
 
 	.SD_nCS(SD_CS), 		// o
-	.SD_DI(SD_MOSI), 		// o
+	.SD_DI(SD_MISO), 		// o
 	.SD_CK(SD_SCK), 		// o
-	.SD_DO(SD_MISO), 		// i
+	.SD_DO(SD_MOSI), 		// i
 
-	//.P_A(joy_fire2), 		// i
-	//.P_U(joy_up), 		// i
-	//.P_D(joy_down), 		// i
-	//.P_L(joy_left), 		// i
-	//.P_R(joy_right), 		// i
-	//.P_tr(joy_fire1) 		// i	
+
+	.P_U(joystick_0[0]), 		// i joy_up
+	.P_D(joystick_0[1]), 		// i joy_down
+	.P_L(joystick_0[2]), 		// i joy_left
+	.P_R(joystick_0[3]), 		// i joy_right
+	.P_tr(joystick_0[4]) 		// i joy_fire1	 
+	.P_A(joystick_0[5]), 		// i joy_fire2
 
 /*	system_2MB
-		.SRAM_ADDR(SRAM_A),
-		.SRAM_DATA(SRAM_D),
-		.SRAM_WE_n(SRAM_WE_n),
-
-		.LED(LED),
-
-		.SD_n_CS(SD_nCS),
-		.SD_DI(SD_DI),
-		.SD_CK(SD_CK),
-		.SD_DO(SD_DO),
-
 	 	.PS2_CLK1(PS2CLKA),
 		.PS2_CLK2(PS2CLKB),
 		.PS2_DATA1(PS2DATA),
@@ -377,7 +367,7 @@ next186 next186Lite
 */
 );
 
-assign CLK_VIDEO = clk_sys;
+assign CLK_VIDEO = clk_28_636;
 reg ce_pix = 1;
 
 //assign VGA_DE = ~(HBlank | VBlank);
@@ -391,7 +381,7 @@ wire [5:0] g;
 wire [5:0] b;
 wire freeze_sync;
 
-video_mixer #(.LINE_LENGTH(544), .HALF_DEPTH(1)) mixer
+video_mixer #(.LINE_LENGTH(544), .HALF_DEPTH(0)) mixer
 (
 	.*,
     .hq2x(scale == 1),

@@ -26,7 +26,7 @@ module cga(
     // RAM
     output ram_we_l,
     output[18:0] ram_a,
-    inout[7:0] ram_d,
+    input[7:0] ram_d,
 
     // Video outputs
     output hsync,
@@ -261,7 +261,7 @@ module cga(
     defparam crtc.V_MAXSCAN = 5'd7;
     defparam crtc.C_START = 7'd6;
     defparam crtc.C_END = 5'd7;
-
+/*
     // Interface to video SRAM chip
 //`ifdef CGA_SNOW
     cga_vram video_buffer (
@@ -273,13 +273,14 @@ module cga(
         .isa_write(bus_mem_cs & ~bus_memw_synced_l),
         .pixel_addr({4'h0, pixel_addr14, pixel_addr13, crtc_addr[11:0],
                     vram_read_a0}),
-        .pixel_data(ram_1_d),
+        .pixel_data(ram_1_d),    // o
         .pixel_read(vram_read),
         .ram_a(ram_a),
         .ram_d(ram_d),
         .ram_we_l(ram_we_l),
         .isa_op_enable(isa_op_enable)
     );
+    */
     /*
 `else
     // Just use the MDA VRAM interface (no snow)
@@ -338,7 +339,7 @@ module cga(
         .mode_640(mode_640),
         .tandy_16_mode(tandy_16_mode),
         .thin_font(thin_font),
-        .vram_data(ram_1_d),
+        .vram_data(ram_1_d),    // i
         .vram_read_char(vram_read_char),
         .vram_read_att(vram_read_att),
         .disp_pipeline(disp_pipeline),

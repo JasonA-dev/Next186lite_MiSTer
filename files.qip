@@ -17,7 +17,9 @@ set_global_assignment -name VERILOG_FILE rtl/common/cache_controller.v
 #set_global_assignment -name VERILOG_FILE rtl/common/cga.v
 #set_global_assignment -name VERILOG_FILE rtl/common/crtc6845.v
 set_global_assignment -name VERILOG_FILE rtl/common/KB_8042.v
-#set_global_assignment -name VERILOG_FILE rtl/common/multiboot.v
+
+# set_global_assignment -name VERILOG_FILE rtl/common/multiboot.v
+
 set_global_assignment -name VERILOG_FILE rtl/common/PIC_8259.v
 set_global_assignment -name VERILOG_FILE rtl/common/sram.v
 set_global_assignment -name VERILOG_FILE rtl/common/timer8253.v

@@ -322,6 +322,7 @@ module system_2MB
     // Thin font switch (TODO: switchable with Keyboard shortcut)    
 	assign thin_font = 1'b0; // Default: No thin font	 
 
+
 	cga_top cga_top (
     	// Clocks
     	.clk_10m(), // i
@@ -373,6 +374,7 @@ module system_2MB
     	.switch2(), // i
     	.switch3()		 // i
 	);
+	
 /*
     // CGA digital to analog converter
     cga_vgaport vga (
@@ -451,7 +453,7 @@ module system_2MB
 		
 	assign CPU_DIN	= s_cache_mreq ? DRAM_dout : CRTCVRAM ? vram_dout : bios_dout;
 	
-	/*
+	
 	BRAM_8KB_BIOS BIOS
 	(
 	  .clka(clk_cpu), // input clka
@@ -459,8 +461,8 @@ module system_2MB
 	  .addra(ADDR[12:2]), // input [10 : 0] addra	  
 	  .douta(bios_dout) // output [31 : 0] douta
 	);
-	*/
-
+	
+/*
 	rom #(.DW(32), .AW(11), .FN("rtl/ipcore/BRAM_8KB_BIOS.mif")) BIOS
 	(
 		.clock(clk_cpu),
@@ -468,8 +470,8 @@ module system_2MB
 		.a(ADDR[12:2]),
 		.data_out(bios_dout)
 	);
-
-	/*
+*/
+	
 	BRAM_32KB_CRTC VRAM
 	(
 	  .clka(clk_cpu), // input clka
@@ -486,8 +488,8 @@ module system_2MB
 	  .doutb(VRAM8_DOUT) // output [7 : 0] doutb  
 
 	);
-	*/
 	
+	/*
 	bram #(.widthad_a(15), .width_a(32)) VRAM
 	(
     // Port A
@@ -507,18 +509,18 @@ module system_2MB
     .byteena_a(CRTCVRAM), 			// input ena
     .byteena_b(VRAM8_ENABLE)
 	);
-	
+	*/
 
 	always @ (posedge clk_cpu_base)
 		div_clk_cpu <= div_clk_cpu + 3'd1;	
 
-  always @(posedge clk_vga) begin
+  	always @(posedge clk_vga) begin
 		sndval <= sndval - sndval[31:7] + (sndsign << 25);				
 		opl2_cen_cnt <= opl2_cen_cnt + 8'd1;
 		if(opl2_cen_cnt >= 8'd7)
 			opl2_cen_cnt  <= 8'd0; // 3.571375 MHz
 		ce_opl2 <= (opl2_cen_cnt < 8'd4) ? 1'b1 : 1'b0;	
-  end
+  	end
 
   
   always @(posedge clk_25) begin
