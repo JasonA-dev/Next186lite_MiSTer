@@ -9,13 +9,13 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/bramvram.sv
 
 #common
 set_global_assignment -name VERILOG_FILE rtl/common/cache_controller.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga_attrib.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga_pixel.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga_scandoubler.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga_sequencer.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga_vgaport.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga.v
-set_global_assignment -name VERILOG_FILE rtl/common/crtc6845.v
+#set_global_assignment -name VERILOG_FILE rtl/common/cga_attrib.v
+#set_global_assignment -name VERILOG_FILE rtl/common/cga_pixel.v
+#set_global_assignment -name VERILOG_FILE rtl/common/cga_scandoubler.v
+#set_global_assignment -name VERILOG_FILE rtl/common/cga_sequencer.v
+#set_global_assignment -name VERILOG_FILE rtl/common/cga_vgaport.v
+#set_global_assignment -name VERILOG_FILE rtl/common/cga.v
+#set_global_assignment -name VERILOG_FILE rtl/common/crtc6845.v
 set_global_assignment -name VERILOG_FILE rtl/common/KB_8042.v
 #set_global_assignment -name VERILOG_FILE rtl/common/multiboot.v
 set_global_assignment -name VERILOG_FILE rtl/common/PIC_8259.v
@@ -23,6 +23,31 @@ set_global_assignment -name VERILOG_FILE rtl/common/sram.v
 set_global_assignment -name VERILOG_FILE rtl/common/timer8253.v
 set_global_assignment -name VERILOG_FILE rtl/common/unit186.v
 set_global_assignment -name VERILOG_FILE rtl/common/vga.v
+
+#graphics-gremlin
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/cga_attrib.v
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/cga_composite.v
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/cga_pixel.v
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/cga_scandoubler.v
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/cga_sequencer.v
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/cga_top.v
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/cga_vgaport.v
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/cga_vram.v
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/cga.v
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/crtc6845.v
+
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/is61_tester.v
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/is61c5128_t.v
+set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/isavideo.v
+
+#set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/mda_attrib.v
+#set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/mda_pixel.v
+#set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/mda_sequencer.v
+#set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/mda_top.v
+#set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/mda_vgaport.v
+#set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/mda_vram.v
+#set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/mda.v
+#set_global_assignment -name VERILOG_FILE rtl/graphics-gremlin/mda70_top.v
 
 #ipcore
 set_global_assignment -name VERILOG_FILE rtl/ipcore/BRAM_8KB_BIOS.v

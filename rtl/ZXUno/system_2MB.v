@@ -320,8 +320,59 @@ module system_2MB
     //assign composite_on = switch3; (TODO: Test in next version, from the original Graphics Gremlin sources)
 	 
     // Thin font switch (TODO: switchable with Keyboard shortcut)    
-	 assign thin_font = 1'b0; // Default: No thin font	 
-    	 
+	assign thin_font = 1'b0; // Default: No thin font	 
+
+	cga_top cga_top (
+    	// Clocks
+    	.clk_10m(), // i
+    	.clk_14m318(clk_vga), // i
+    	.clk_bus(), // i
+
+    	// Bus reset
+    	.busreset(), // i
+
+    	// ISA bus
+    	.bus_a(PORT_ADDR), // i  19:0
+    	.bus_ior_l(WR), // i
+    	.bus_iow_l(~WR), // i
+    	.bus_memr_l(1'd0), // i
+    	.bus_memw_l(1'd0), // i
+    	.bus_d(CPU_DOUT), // io 7:0
+    	.bus_dir(CRTC_OE), // o
+    	//.bus_rdy(), // o
+    	//.bus_0ws_l(), // o
+    	.bus_aen(~(IORQ & CPU_CE)), // i
+    	.bus_ale(), // i
+
+    	// RAM
+    	.ram_we_l(VRAM8_ENABLE),	// o
+    	.ram_a(VRAM8_ADDR), // o 18:0
+    	.ram_d(VRAM8_DOUT), // io 7:0
+
+    	// Video outputs
+    	.hsync(VGA_HSYNC), // o
+    	.vsync(VGA_VSYNC), // o
+    	.vid_en_l(), // o
+    	.d_r(), // o
+    	.d_g(), // o
+    	.d_b(), // o
+    	.d_r2(), // o
+    	.d_g2(), // o
+    	.d_b2(), // o
+    	.vga_hsync(), // o
+    	.vga_vsync(), // o
+    	.red(VGA_R), // o 5:0
+    	.green(VGA_G), // o 6:0
+    	.blue(VGA_B), // o 5:0
+
+		.hdisp(HBlank),
+		.vdisp(VBlank),
+
+    	// Config switches
+    	.switch2(), // i
+    	.switch3()		 // i
+	);
+/*
     // CGA digital to analog converter
     cga_vgaport vga (
         .clk(clk_vga),
@@ -355,6 +406,9 @@ module system_2MB
 		.hdisp(HBlank),
 		.vdisp(VBlank),
 
+		.h_end(),
+		.v_end(),
+
         .video(video),
         .dbl_video(vga_video),
         .comp_video(comp_video),
@@ -362,7 +416,7 @@ module system_2MB
     );
 
 	defparam cga1.BLINK_MAX = 24'd4772727;
-
+*/
 	SRAM_8bit SRAM
 	(
 		.sys_CLK(clk_sdr),							// clock
@@ -383,7 +437,7 @@ module system_2MB
 	parameter bios_addr_fe000 = 8'b01111111; // FE000 (2 KB)
 		
 	wire MREQ;
-   wire CRTCVRAM = (ADDR[20:15] == crtc_addr);	
+    wire CRTCVRAM = (ADDR[20:15] == crtc_addr);	
 	wire BIOSROM = ((ADDR[20:13] == bios_addr_fe000) & f_map_to_f);	
 	
 	wire CACHE_EN = ~(CRTCVRAM | BIOSROM);
@@ -569,7 +623,7 @@ module system_2MB
 		 .NMI(CPU_CE && IORQ && PORT_ADDR >= NMIonIORQ_LO && PORT_ADDR <= NMIonIORQ_HI),
 		 .RST(!rstcount[4]), 
 		 .INTA(INTA), 
-		 .LOCK(LOCK), 
+		 //.LOCK(LOCK), 
 		 .HALT(HALT), 
 		 .MREQ(MREQ),
 		 .IORQ(IORQ),

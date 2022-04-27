@@ -288,6 +288,8 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED_*
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to BTN_*
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to BTN_*
 source files.qip
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/next186.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/bramvram.sv
 set_global_assignment -name VERILOG_FILE rtl/rom.v
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/bram.sv
 set_global_assignment -name VERILOG_FILE rtl/lfsr.v
@@ -296,13 +298,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/Next186Lite.v
 set_global_assignment -name SDC_FILE Next186Lite.sdc
 set_global_assignment -name SYSTEMVERILOG_FILE Next186Lite.sv
 set_global_assignment -name VERILOG_FILE rtl/common/cache_controller.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga_attrib.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga_pixel.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga_scandoubler.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga_sequencer.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga_vgaport.v
-set_global_assignment -name VERILOG_FILE rtl/common/cga.v
-set_global_assignment -name VERILOG_FILE rtl/common/crtc6845.v
 set_global_assignment -name VERILOG_FILE rtl/common/KB_8042.v
 set_global_assignment -name VERILOG_FILE rtl/common/PIC_8259.v
 set_global_assignment -name VERILOG_FILE rtl/common/sram.v

@@ -128,9 +128,12 @@ module emu
 	//SDRAM interface with lower latency
 	output        SDRAM_CLK,
 	output        SDRAM_CKE,
-	output [12:0] SDRAM_A,
+	output [20:0] SDRAM_A,  // was 12
 	output  [1:0] SDRAM_BA,
 	inout  [15:0] SDRAM_DQ,
+	//output [12:0] SDRAM_A,
+	//output  [1:0] SDRAM_BA,
+	//inout  [15:0] SDRAM_DQ,	
 	output        SDRAM_DQML,
 	output        SDRAM_DQMH,
 	output        SDRAM_nCS,
@@ -327,9 +330,9 @@ next186 next186Lite
 	.VGA_G(g),  		// o 5:0
 	.VGA_B(b),  		// o 5:0
 
-	//.SRAM_WE_n(SDRAM_nWE), 	// o
-	//.SRAM_A(SDRAM_A), 		// o 20:0  fix
-	//.SRAM_D(SDRAM_DQ), 		// io 7:0  fix
+	.SRAM_WE_n(SDRAM_nWE), 	// o
+	.SRAM_A(SDRAM_A), 		// o 20:0  fix
+	.SRAM_D(SDRAM_DQ[7:0]), 		// io 7:0  fix
 
 	//.LED(), 		// o
 
@@ -388,17 +391,15 @@ wire [5:0] g;
 wire [5:0] b;
 wire freeze_sync;
 
-video_mixer #(448, 1) mixer
+video_mixer #(.LINE_LENGTH(544), .HALF_DEPTH(1)) mixer
 (
 	.*,
+    .hq2x(scale == 1),
+    .scandoubler (scale || forced_scandoubler),
 
-        .hq2x(scale == 1),
-        .scandoubler (scale || forced_scandoubler),
-
-        .R({r[5:0],r[5]}), 
-        .G({g[5:0],g[5]}), 
-        .B({b[5:0],b[5]}),
-
+    .R({r[5:0],r[5]}), 
+    .G({g[5:0],g[5]}), 
+    .B({b[5:0],b[5]}),
 );
 
 endmodule

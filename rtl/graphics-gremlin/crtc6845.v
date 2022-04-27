@@ -6,7 +6,7 @@
 // http://creativecommons.org/licenses/by-sa/4.0/ or send a letter to Creative
 // Commons, PO Box 1866, Mountain View, CA 94042, USA.
 //
-`default_nettype wire
+`default_nettype none
 module crtc6845(
     input clk,
     input divclk,
@@ -14,10 +14,9 @@ module crtc6845(
     // ISA bus
     input cs,
     input a0,
-	input word,
     input write,
     input read,
-    input[15:0] bus,
+    input[7:0] bus,
     output reg [7:0] bus_out,
 
     input lock,
@@ -26,15 +25,14 @@ module crtc6845(
     output hsync,
     output vsync,
 
-    output reg hdisp,
-    output reg vdisp,
+	output reg hdisp,
+	output reg vdisp,
 
     output display_enable,
     output cursor,
     output [13:0] mem_addr,
     output [4:0] row_addr,
-    output line_reset
-);
+    output line_reset);
 
     parameter H_TOTAL = 0;
     parameter H_DISP = 0;
@@ -49,7 +47,7 @@ module crtc6845(
     parameter C_END = 0;
 
     reg[4:0] cur_addr;
-    // reg[7:0] bus_out;
+    //reg[7:0] bus_out;
 
     // Address register
     always @ (posedge clk) begin
@@ -60,24 +58,24 @@ module crtc6845(
 
     // Register file
     always @ (posedge clk) begin
-        if ((a0 | word) & write & cs & (~lock | ((word ? bus[4:0] : cur_addr) > 5'd9))) begin
-            case (word ? bus[4:0] : cur_addr)
-                5'd0: h_total <= word ? bus[15:8] : bus[7:0];
-                5'd1: h_disp <= word ? bus[15:8] : bus[7:0];
-                5'd2: h_syncpos <= word ? bus[15:8] : bus[7:0];
-                5'd3: h_syncwidth <= word ? bus[11:8] : bus[3:0];
-                5'd4: v_total <= word ? bus[14:8] : bus[6:0];
-                5'd5: v_totaladj <= word ? bus[12:8] : bus[4:0];
-                5'd6: v_disp <= word ? bus[14:8] : bus[6:0];
-                5'd7: v_syncpos <= word ? bus[14:8] : bus[6:0];
+        if (a0 & write & cs & (~lock | (cur_addr > 5'd9))) begin
+            case (cur_addr)
+                5'd0: h_total <= bus;
+                5'd1: h_disp <= bus;
+                5'd2: h_syncpos <= bus;
+                5'd3: h_syncwidth <= bus[3:0];
+                5'd4: v_total <= bus[6:0];
+                5'd5: v_totaladj <= bus[4:0];
+                5'd6: v_disp <= bus[6:0];
+                5'd7: v_syncpos <= bus[6:0];
                 // Register 8 not implemented
-                5'd9: v_maxscan <= word ? bus[12:8] : bus[4:0];
-                5'd10: c_start <= word ? bus[14:8] : bus[6:0];
-                5'd11: c_end <= word ? bus[12:8] : bus[4:0];
-                5'd12: start_a[13:8] <= word ? bus[13:8] : bus[5:0];
-                5'd13: start_a[7:0] <= word ? bus[15:8] : bus[7:0];
-                5'd14: cursor_a[13:8] <= word ? bus[13:8] : bus[5:0];
-                5'd15: cursor_a[7:0] <= word ? bus[15:8] : bus[7:0];					 
+                5'd9: v_maxscan <= bus[4:0];
+                5'd10: c_start <= bus[6:0];
+                5'd11: c_end <= bus[4:0];
+                5'd12: start_a[13:8] <= bus[5:0];
+                5'd13: start_a[7:0] <= bus;
+                5'd14: cursor_a[13:8] <= bus[5:0];
+                5'd15: cursor_a[7:0] <= bus;
                 default: ;
             endcase
         end
@@ -132,7 +130,7 @@ module crtc6845(
     reg [3:0] h_synccount = 4'd1; // Must start at 1
     reg [4:0] v_scancount = 5'd0;
     reg [6:0] v_rowcount = 7'd0;
-    reg [5:0] v_synccount = 6'd0;
+    reg [3:0] v_synccount = 4'd0;
     reg [4:0] cursor_counter = 5'd0; // Cursor blink
 
 
@@ -142,9 +140,8 @@ module crtc6845(
 
     reg vs = 1'b0;
     reg hs = 1'b0;
-
-    //assign hdisp = 1'b1;
-    //assign vdisp = 1'b1;
+    //reg hdisp = 1'b1;
+    //reg vdisp = 1'b1;
 
     wire cur_on;
     wire blink;
@@ -234,8 +231,8 @@ module crtc6845(
             // Vertical sync pulse is fixed at 16 scan line times
             // Vsync pulse turns off after 16 lines
             if (vs) begin
-                if (v_synccount == 6'd15) begin // 15  was 37
-                    v_synccount <= 6'd0;
+                if (v_synccount == 4'd15) begin
+                    v_synccount <= 4'd0;
                     vs <= 0;
                 end else begin
                     v_synccount <= v_synccount + 1;

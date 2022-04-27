@@ -117,7 +117,7 @@ module cache_controller(
 		ddr_dout <= lowaddr[0] ? cache_QA[15:0] : cache_QA[31:16];
 	end
 	
-	/*
+	
 	cache cache_mem (
 	  .clka(ddr_clk), // input clka
 	  .ena(cache_write_data | cache_read_data),
@@ -133,8 +133,9 @@ module cache_controller(
 	  .dinb(din), // input [31 : 0] dinb
 	  .doutb(dout) // output [31 : 0] doutb
 	);
-	*/
 	
+	
+	/*
 	bramvram cache_mem
 	(
     // Port A
@@ -153,9 +154,9 @@ module cache_controller(
 
     .byteena_a(cache_write_data | cache_read_data), 			
     .byteena_b(mreq & hit & st0)
-
 	);
-	
+	*/
+
 	always @(cache0, cache1, cache2, cache3, cache4, cache5, cache6, cache7) begin
 		dirty = 1'bx;
 		case(1)

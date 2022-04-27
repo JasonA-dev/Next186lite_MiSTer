@@ -14,7 +14,7 @@ module bramvram #(
      
     // Port B
     input   wire                    clock_b,
-    input   wire                    wren_b,
+    input   wire     [3:0]               wren_b,
     input   wire    [widthad_a-1:0] address_b, 
     input   wire    [width_a-1:0]  data_b,    
     output  reg     [width_a-1:0]  q_b,       

@@ -6,19 +6,18 @@
 // http://creativecommons.org/licenses/by-sa/4.0/ or send a letter to Creative
 // Commons, PO Box 1866, Mountain View, CA 94042, USA.
 //
-`default_nettype wire
+`default_nettype none
 module cga(
     // Clocks
     input clk,
 
     // ISA bus
-    input[15:0] bus_a,
+    input[19:0] bus_a,
     input bus_ior_l,
     input bus_iow_l,
     input bus_memr_l,
     input bus_memw_l,
-	 input word,
-    input[15:0] bus_d,
+    input[7:0] bus_d,
     output[7:0] bus_out,
     output bus_dir,
     input bus_aen,
@@ -27,15 +26,15 @@ module cga(
     // RAM
     output ram_we_l,
     output[18:0] ram_a,
-    input[7:0] ram_d,
-	 
+    inout[7:0] ram_d,
+
     // Video outputs
     output hsync,
     output dbl_hsync,
     output vsync,
 
-    output hdisp,
-    output vdisp,
+	output hdisp,
+	output vdisp,
 
     output[3:0] video,
     output[3:0] dbl_video,
@@ -44,41 +43,40 @@ module cga(
     input thin_font
     );
 
-    parameter MDA_70HZ = 1;
+    parameter MDA_70HZ = 0;
     parameter BLINK_MAX = 0;
     // `define CGA_SNOW = 1; No snow
 
     parameter USE_BUS_WAIT = 0; // Should we add wait states on the ISA bus?
     parameter NO_DISPLAY_DISABLE = 1; // If 1, prevents flicker artifacts in DOS
 
-    parameter IO_BASE_ADDR = 16'h3d0; // MDA is 3B0, CGA is 3D0
-    // parameter FRAMEBUFFER_ADDR = 20'hB8000; // MDA is B0000, CGA is B8000
+    parameter IO_BASE_ADDR = 20'h3d0; // MDA is 3B0, CGA is 3D0
+    parameter FRAMEBUFFER_ADDR = 20'hB8000; // MDA is B0000, CGA is B8000
 
     wire crtc_cs;
     wire status_cs;
     wire colorsel_cs;
     wire control_cs;
-    //wire bus_mem_cs;
+    wire bus_mem_cs;
 
     reg[7:0] bus_int_out;
     wire[7:0] bus_out_crtc;
     wire[7:0] bus_out_mem;
     wire[7:0] cga_status_reg;
-    //reg[7:0] cga_control_reg = 8'b0010_1000; // (TEXT)
-	reg[7:0] cga_control_reg = 8'b0010_1010; // (GFX 320 x 200)
+    reg[7:0] cga_control_reg = 8'b0010_1000; // 0010_1001
     reg[7:0] cga_color_reg = 8'b0000_0000;
     wire hres_mode;
     wire grph_mode;
     wire bw_mode;
     wire mode_640;
     wire tandy_16_mode;
-    wire video_enabled; 
+    wire video_enabled;
     wire blink_enabled;
 
     wire hsync_int;
     wire vsync_l;
     wire cursor;
-    // wire [3:0] video;
+    //wire[3:0] video;
     wire display_enable;
 
     // Two different clocks from the sequencer
@@ -110,23 +108,15 @@ module cga(
     reg bus_ior_synced_l;
     reg bus_iow_synced_l;
 
-    //wire cpu_memsel;
-    //reg[1:0] wait_state = 2'd0;
-    //reg bus_rdy_latch; 
-	 
-	 assign ram_a = {4'b0001, pixel_addr14, pixel_addr13, crtc_addr[11:0],
-                    vram_read_a0};
-						  
-	 assign ram_1_d = ram_d;
-	 //assign ram_1_d = 8'hFF;
-	 assign ram_we_l = vram_read;
-	 
+    wire cpu_memsel;
+    reg[1:0] wait_state = 2'd0;
+    reg bus_rdy_latch;
 
     // Synchronize ISA bus control lines to our clock
     always @ (posedge clk)
     begin
-        //bus_memw_synced_l <= bus_memw_l;
-        //bus_memr_synced_l <= bus_memr_l;
+        bus_memw_synced_l <= bus_memw_l;
+        bus_memr_synced_l <= bus_memr_l;
         bus_ior_synced_l <= bus_ior_l;
         bus_iow_synced_l <= bus_iow_l;
     end
@@ -135,50 +125,42 @@ module cga(
     assign vsync = ~vsync_l;
 
     // Mapped IO
-    assign crtc_cs = (bus_a[15:3] == IO_BASE_ADDR[15:3]) & ~bus_aen; // 3D4/3D5
+    assign crtc_cs = (bus_a[19:3] == IO_BASE_ADDR[19:3]) & ~bus_aen; // 3B4/3B5
     assign status_cs = (bus_a == IO_BASE_ADDR + 20'hA) & ~bus_aen;
-	 assign control_cs = (bus_a == IO_BASE_ADDR + 16'h8) & ~bus_aen;
-    assign colorsel_cs = (bus_a == IO_BASE_ADDR + 20'h9) & ~bus_aen;	 
+    assign control_cs = (bus_a == IO_BASE_ADDR + 20'h8) & ~bus_aen;
+    assign colorsel_cs = (bus_a == IO_BASE_ADDR + 20'h9) & ~bus_aen;
+
     // Memory-mapped from B0000 to B7FFF
-    //assign bus_mem_cs = (bus_a[19:15] == FRAMEBUFFER_ADDR[19:15]);
-	 //assign bus_mem_cs = 1'b1;
-	 
+    assign bus_mem_cs = (bus_a[19:15] == FRAMEBUFFER_ADDR[19:15]);
+
     // Mux ISA bus data from every possible internal source.
     always @ (*)
     begin
-        //if (bus_mem_cs & ~bus_memr_l) begin
-        //    bus_int_out <= bus_out_mem;
-        if (status_cs & ~bus_ior_l) begin
+        if (bus_mem_cs & ~bus_memr_l) begin
+            bus_int_out <= bus_out_mem;
+        end else if (status_cs & ~bus_ior_l) begin
             bus_int_out <= cga_status_reg;
         end else if (crtc_cs & ~bus_ior_l & (bus_a[0] == 1)) begin
             bus_int_out <= bus_out_crtc;
-		  //end if (status_cs) begin
-		  //		bus_int_out <= cga_status_reg;
-		  //end else if (crtc_cs) begin
-		  //		bus_int_out <= bus_out_crtc;
         end else begin
             bus_int_out <= 8'h00;
         end
     end
 
     // Only for read operations does bus_dir go high.
-    assign bus_dir = (crtc_cs | status_cs) & ~bus_ior_l;
-    //                | (bus_mem_cs & ~bus_memr_l);
-	 //assign bus_dir = (crtc_cs | status_cs);
+    assign bus_dir = ((crtc_cs | status_cs) & ~bus_ior_l) |
+                    (bus_mem_cs & ~bus_memr_l);
     assign bus_out = bus_int_out;
 
     // Wait state generator
     // Optional for operation but required to run timing-sensitive demos
     // e.g. 8088MPH.
-    /*
-	 if (USE_BUS_WAIT == 0) begin
+    //if (USE_BUS_WAIT == 0) begin
         assign bus_rdy = 1;
-    end else begin
-        assign bus_rdy = bus_rdy_latch;
-    end
-	 */
+    //end else begin
+    //    assign bus_rdy = bus_rdy_latch;
+    //end
 
-/*
     assign cpu_memsel = bus_mem_cs & (~bus_memr_l | ~bus_memw_l);
 
     always @ (posedge clk)
@@ -207,7 +189,7 @@ module cga(
             bus_rdy_latch <= 1;
         end
     end
-*/
+
 
     // status register (read only at 3BA)
     // FIXME: vsync_l should be delayed/synced to HCLK.
@@ -218,13 +200,11 @@ module cga(
     assign hres_mode = cga_control_reg[0]; // 1=80x25,0=40x25
     assign grph_mode = cga_control_reg[1]; // 1=graphics, 0=text
     assign bw_mode = cga_control_reg[2]; // 1=b&w, 0=color
-
     //if (NO_DISPLAY_DISABLE == 1) begin
-        assign video_enabled = 1;
+    //    assign video_enabled = 1;
     //end else begin
-   //     assign video_enabled = cga_control_reg[3];
+        assign video_enabled = cga_control_reg[3];
     //end
-
     assign mode_640 = cga_control_reg[4]; // 1=640x200 mode, 0=others
     assign blink_enabled = cga_control_reg[5];
 
@@ -238,9 +218,9 @@ module cga(
     begin
         if (~bus_iow_synced_l) begin
             if (control_cs) begin
-                cga_control_reg <= bus_d[7:0];
+                cga_control_reg <= bus_d;
             end else if (colorsel_cs) begin
-                cga_color_reg <= bus_d[7:0];
+                cga_color_reg <= bus_d;
             end
         end
     end
@@ -251,7 +231,6 @@ module cga(
         .divclk(crtc_clk),
         .cs(crtc_cs),
         .a0(bus_a[0]),
-		.word(word),
         .write(~bus_iow_synced_l),
         .read(~bus_ior_synced_l),
         .bus(bus_d),
@@ -260,13 +239,9 @@ module cga(
         .hsync(hsync_int),
         .vsync(vsync_l),
 
-        // blanks
-        .hdisp(hdisp),
-        .vdisp(vdisp),
-
-        .h_end(),
-        .v_end(),
-
+		.hdisp(hdisp),
+		.vdisp(vdisp),
+                
         .display_enable(display_enable),
         .cursor(cursor),
         .mem_addr(crtc_addr),
@@ -275,9 +250,9 @@ module cga(
     );
 
     // CGA 40 column timings
-    defparam crtc.H_TOTAL = 8'd56;
-    defparam crtc.H_DISP = 8'd40;
-    defparam crtc.H_SYNCPOS = 8'd45;
+    defparam crtc.H_TOTAL = 8'd56; // 113
+    defparam crtc.H_DISP = 8'd40;   // 80
+    defparam crtc.H_SYNCPOS = 8'd45;    // 90
     defparam crtc.H_SYNCWIDTH = 4'd10;
     defparam crtc.V_TOTAL = 7'd31;
     defparam crtc.V_TOTALADJ = 5'd6;
@@ -287,13 +262,53 @@ module cga(
     defparam crtc.C_START = 7'd6;
     defparam crtc.C_END = 5'd7;
 
+    // Interface to video SRAM chip
+//`ifdef CGA_SNOW
+    cga_vram video_buffer (
+        .clk(clk),
+        .isa_addr({4'b000, bus_a[14:0]}),
+        .isa_din(bus_d),
+        .isa_dout(bus_out_mem),
+        .isa_read(bus_mem_cs & ~bus_memr_synced_l),
+        .isa_write(bus_mem_cs & ~bus_memw_synced_l),
+        .pixel_addr({4'h0, pixel_addr14, pixel_addr13, crtc_addr[11:0],
+                    vram_read_a0}),
+        .pixel_data(ram_1_d),
+        .pixel_read(vram_read),
+        .ram_a(ram_a),
+        .ram_d(ram_d),
+        .ram_we_l(ram_we_l),
+        .isa_op_enable(isa_op_enable)
+    );
+    /*
+`else
+    // Just use the MDA VRAM interface (no snow)
+    mda_vram video_buffer (
+        .clk(clk),
+        .isa_addr({4'b000, bus_a[14:0]}),
+        .isa_din(bus_d),
+        .isa_dout(bus_out_mem),
+        .isa_read(bus_mem_cs & ~bus_memr_synced_l),
+        .isa_write(bus_mem_cs & ~bus_memw_synced_l),
+        .pixel_addr({4'h0, pixel_addr14, pixel_addr13, crtc_addr[11:0],
+                    vram_read_a0}),
+        .pixel_data(ram_1_d),
+        .pixel_read(vram_read),
+        .ram_a(ram_a),
+        .ram_d(ram_d),
+        .ram_we_l(ram_we_l),
+        .isa_op_enable(isa_op_enable)
+    );
+    defparam video_buffer.MDA_70HZ = 0; // 70Hz VRAM timing no good for CGA.
+`endif
+*/
+
     // In graphics mode, memory address MSB comes from CRTC row
     // which produces the weird CGA "interlaced" memory map
     assign pixel_addr13 = grph_mode ? row_addr[0] : crtc_addr[12];
 
     // Address bit 14 is only used for Tandy modes (32K RAM)
     assign pixel_addr14 = grph_mode ? row_addr[1] : 1'b0;
-	 
 
 
     // Sequencer state machine
@@ -351,10 +366,22 @@ module cga(
         end
     end
 
+    // Composite video generation
+    cga_composite comp (
+        .clk(clk),
+        .lclk(lclk),
+        .hclk(hclk),
+        .video(video),
+        .hsync(hsync_int),
+        .vsync_l(vsync_l),
+        .bw_mode(bw_mode),
+        .comp_video(comp_video)
+    );
+
     cga_scandoubler scandoubler (
         .clk(clk),
         .line_reset(line_reset),
-        .video(video),		  
+        .video(video),
         .dbl_hsync(dbl_hsync),
         .dbl_video(dbl_video)
     );
