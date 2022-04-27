@@ -338,6 +338,7 @@ module system_2MB
     	.bus_memr_l(1'd0), // i
     	.bus_memw_l(1'd0), // i
     	.bus_d(CPU_DOUT), // io 7:0
+        .bus_out(CRTC_DOUT),		
     	.bus_dir(CRTC_OE), // o
     	//.bus_rdy(), // o
     	//.bus_0ws_l(), // o

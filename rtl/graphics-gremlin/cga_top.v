@@ -22,7 +22,8 @@ module cga_top(
     input bus_iow_l,
     input bus_memr_l,
     input bus_memw_l,
-    inout[7:0] bus_d,
+    input[15:0] bus_d,
+    output[7:0] bus_out,    
     output bus_dir,
     output bus_rdy,
     output bus_0ws_l,
@@ -66,7 +67,7 @@ module cga_top(
     wire clk_main;
     wire pll_lock;
 
-    wire[7:0] bus_out;
+    //wire[7:0] bus_out;
 
     wire[3:0] video;
     wire[3:0] vga_video;
@@ -97,7 +98,7 @@ module cga_top(
     assign thin_font = switch2;
 
     // Set up bus direction
-    assign bus_d = (bus_dir) ? bus_out : 8'hzz;
+    //assign bus_d = (bus_dir) ? bus_out : 8'hzz;
 
     // CGA mode
     // Take our incoming 14.318MHz clock and generate the pixel clock
