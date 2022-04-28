@@ -78,6 +78,7 @@
     <ClCompile Include="obj_dir\Vtop__Syms.cpp" />
     <ClCompile Include="obj_dir\Vtop__Slow.cpp" />
     <ClCompile Include="obj_dir\Vtop__1__Slow.cpp" />
+    <ClCompile Include="obj_dir\Vtop__2.cpp" />
     <ClCompile Include="sim\sim_clock.cpp" />
     <ClCompile Include="sim\sim_bus.cpp" />
     <ClCompile Include="sim\sim_console.cpp" />
