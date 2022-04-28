@@ -87,6 +87,7 @@ module crtc6845(
             5'd0: bus_out <= h_total;
             5'd1: bus_out <= h_disp;
             5'd2: bus_out <= h_syncpos;
+	        /* verilator lint_off WIDTH */ 	             
             5'd3: bus_out <= h_syncwidth;
             5'd4: bus_out <= v_total;
             5'd5: bus_out <= v_totaladj;
@@ -96,13 +97,16 @@ module crtc6845(
             5'd9: bus_out <= v_maxscan;
             5'd10: bus_out <= c_start;
             5'd11: bus_out <= c_end;
+	        /* verilator lint_on WIDTH */             
             5'd12: bus_out <= {2'b00, start_a[13:8]};
             5'd13: bus_out <= start_a[7:0];
             5'd14: bus_out <= {2'b00, cursor_a[13:8]};
             5'd15: bus_out <= cursor_a[7:0];
             5'd16: bus_out <= 8'h00; // Light pen regs
             5'd17: bus_out <= 8'h00;
+	        /* verilator lint_off COMBDLY */              
             default: bus_out <= 8'h00;
+	        /* verilator lint_on COMBDLY */              
         endcase;
     end
 
@@ -231,7 +235,9 @@ module crtc6845(
             // Vertical sync pulse is fixed at 16 scan line times
             // Vsync pulse turns off after 16 lines
             if (vs) begin
+	            /* verilator lint_off WIDTH */ 
                 if (v_synccount == 4'd31) begin   // 15
+	                /* verilator lint_off WIDTH */ 
                     v_synccount <= 4'd0;
                     vs <= 0;
                 end else begin

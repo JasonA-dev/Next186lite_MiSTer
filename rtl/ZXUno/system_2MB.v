@@ -198,9 +198,11 @@ module system_2MB
 	wire TIMER_OE = PORT_ADDR[15:2] == 14'b00000000010000;	//   40h..43h	
 	wire LED_PORT = PORT_ADDR[15:0] == 16'h03bc;
 	wire SPEAKER_PORT = PORT_ADDR[15:0] == 16'h0061;
+	
 	/* verilator lint_off WIDTH */
 	wire CPU_SPEED_OE = PORT_ADDR[15:0] == 12'h0097;	
 	/* verilator lint_on WIDTH */
+
 	wire MEMORY_SIZE = PORT_ADDR[15:0] == 16'h0098;
 	wire PCXTCORENN = PORT_ADDR[15:0] == 16'h0099;	
 	wire MEMORY_MAP = PORT_ADDR[15:4] == 12'h008;	
@@ -211,7 +213,11 @@ module system_2MB
 	wire PIC_OE = PORT_ADDR[15:8] == 8'h00 && PORT_ADDR[6:1] == 6'b010000;	// 20h, 21h, a0h, a1h
 	wire KB_OE = PORT_ADDR[15:4] == 12'h006 && {PORT_ADDR[3], PORT_ADDR[1:0]} == 3'b000; // 60h, 64h
 	wire JOYSTICK = PORT_ADDR[15:4] == 12'h020; // 0x200-0x20f
+
+	/* verilator lint_off WIDTH */  	
 	wire ADLIB_OE = PORT_ADDR[15:1] == (16'h0388 >> 1); // 0x388, 0x389
+	/* verilator lint_on WIDTH */  	
+
 	wire [15:0]PORT_IN;
 	wire [7:0]TIMER_DOUT;
 	wire [7:0]KB_DOUT;
@@ -275,7 +281,10 @@ module system_2MB
    wire [15:0]opl2snd;
 	reg [31:0]sndval = 0;
 	
+	/* verilator lint_off WIDTH */  
 	wire [16:0]sndmix = (({opl2snd[15], opl2snd}) << 2) + ((timer_spk & speaker_on[1]) << 15); // signed mixer
+	/* verilator lint_on WIDTH */  
+
 	wire [15:0]sndamp = (~|sndmix[16:15] | &sndmix[16:15]) ? {!sndmix[15], sndmix[14:0]} : {16{!sndmix[16]}}; // clamp to [-32768..32767] and add 32878
 	wire sndsign = sndval[31:16] < sndamp;
 	
@@ -325,6 +334,7 @@ module system_2MB
 	assign thin_font = 1'b0; // Default: No thin font	 
 
 
+	/* verilator lint_off WIDTH */  
 	cga_top cga_top (
     	// Clocks
     	.clk_10m(), // i
@@ -378,7 +388,8 @@ module system_2MB
     	.switch2(), // i
     	.switch3()		 // i
 	);
-	
+	/* verilator lint_on WIDTH */  
+
 /*
     // CGA digital to analog converter
     cga_vgaport vga (
@@ -494,6 +505,7 @@ module system_2MB
 	);
 	*/
 	
+	/* verilator lint_off WIDTH */  	
 	bram #(.widthad_a(15), .width_a(32)) VRAM
 	(
     // Port A
@@ -513,13 +525,15 @@ module system_2MB
     .byteena_a(CRTCVRAM), 			// input ena
     .byteena_b(VRAM8_ENABLE)
 	);
-	
+	/* verilator lint_on WIDTH */  	
 
 	always @ (posedge clk_cpu_base)
 		div_clk_cpu <= div_clk_cpu + 3'd1;	
 
   	always @(posedge clk_vga) begin
+		/* verilator lint_off WIDTH */  		  
 		sndval <= sndval - sndval[31:7] + (sndsign << 25);				
+		/* verilator lint_on WIDTH */  		
 		opl2_cen_cnt <= opl2_cen_cnt + 8'd1;
 		if(opl2_cen_cnt >= 8'd7)
 			opl2_cen_cnt  <= 8'd0; // 3.571375 MHz

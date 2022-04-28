@@ -82,7 +82,9 @@ module cga_attrib(
     always @ (*)
     begin
         if (shutter) begin
+	    /* verilator lint_off COMBDLY */            
             pix_out <= 4'b0;
+	    /* verilator lint_on COMBDLY */            
         end else begin
             case ({mux_b, mux_a})
                 2'b00: pix_out <= att_fg; // Text foreground

@@ -7,15 +7,19 @@ module top (
    input clk_14_318, // i
 	input reset,
 
+   input [11:0]  inputs /*verilator public_flat*/,
+   input clk_48 /*verilator public_flat*/,
+   input clk_12 /*verilator public_flat*/,
+
    //.pal(),        // i
    //.scandouble(), // i
 
    output ce_pix,     // o
 
-   output HBlank,     // o
-   output HSync,      // o
-   output VBlank,     // o
-   output VSync,      // o
+   output VGA_HB,     // o
+   output VGA_HS,      // o
+   output VGA_VB,     // o
+   output VGA_VS,      // o
 
    output VGA_R,      // o 5:0  ?? 7:0
    output VGA_G,      // o 5:0  ?? 7:0
@@ -48,9 +52,11 @@ module top (
    input P_tr,        // i	
 
 	input			   ioctl_download,
+	input			   ioctl_upload,   
 	input			   ioctl_wr,
 	input [24:0]	ioctl_addr,
 	input [7:0]		ioctl_dout,
+	output [7:0]		ioctl_din,   
 	input [7:0]		ioctl_index,
 	output reg		ioctl_wait=1'b0
 );

@@ -115,12 +115,14 @@ module Next186_ALU(
 	wire LONIBBLE = (RA[3:0] > 4'h9)  || FIN[4];
 	wire HINIBBLE = (RA[7:0] > 8'h99) || FIN[0];
 
+	/* verilator lint_off WIDTH */ 
 // ADDER		
 	assign {AF, SUMOUT[3:0]} = SUMOP1[3:0] + SUMOP2[3:0] + SCIN;
 	assign {SC8OUT, SUMOUT[7:4]} = SUMOP1[7:4] + SUMOP2[7:4] + AF;
 	assign {SC16OUT, SUMOUT[15:8]} = SUMOP1[15:8] + SUMOP2[15:8] + SC8OUT;
 	assign COUT = (WORD ? SC16OUT : SC8OUT) ^ CPLOP2;
 	assign ALUOUTA = ALUOP == 5'b11111 ? RB : SUMOUT;
+	/* verilator lint_on WIDTH */ 
 
 // SHIFTER
 	reg [4:0]SHNOPT;	// optimized shift
@@ -129,7 +131,9 @@ module Next186_ALU(
 	wire [2:0]COUNT = |SHN[4:3] ? 0 : SHN[2:0];
 	wire [2:0]SCOUNT = (EXOP[0] ? COUNT[2:0] : 3'b000) - (EXOP[0] ? 3'b001 : COUNT[2:0]);
 	reg [7:0]SHEX;
+	/* verilator lint_off WIDTH */ 	
 	wire [17:0]SHBAR = (EXOP[0] ? {1'bx, SHEX, WORD ? RA[15:8]: SHEX, RA[7:0]} : {RA, SHEX, 1'bx}) >> SCOUNT;
+	/* verilator lint_on WIDTH */ 
 
 // MULTIPLIER
 	wire signed [16:0]MULOP1 = WORD ? {ALUOP[0] & TMP16[15], TMP16} : {ALUOP[0] ? {9{TMP16[7]}} : 9'b000000000, TMP16[7:0]};
@@ -182,6 +186,7 @@ module Next186_ALU(
 			default: SHEX = 8'h00;						// SHL16, SHR16, SHL8, SHR8
 		endcase
 
+		/* verilator lint_off CASEINCOMPLETE */
 		case(ALUOP)
 			5'b00000, 5'b00010, 5'b00011, 5'b00101, 5'b00111, 5'b01010, 5'b01011: ALUOUT = SUMOUT;	// ADD, ADC, SBB, SUB, CMP, NOT, NEG
 			5'b00001: begin	// OR
@@ -274,6 +279,7 @@ module Next186_ALU(
 				FOUT = {WORD ? RA[15:8] : FIN[15:8], RA[7:0]};
 			end
 		endcase
+		/* verilator lint_on CASEINCOMPLETE */		
 	end
 
 endmodule

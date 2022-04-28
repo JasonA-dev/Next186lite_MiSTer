@@ -51,20 +51,24 @@ output [7 : 0] doutb;
 reg [width_a-1:0] mem [(2**widthad_a)-1:0];
 // Port A
 always @(posedge clock_a) begin
+	/* verilator lint_off WIDTH */      
     q_a      <= mem[address_a];
     if(wren_a) begin
         q_a      <= data_a;
         mem[address_a] <= data_a;
     end
+	/* verilator lint_on WIDTH */     
 end
  
 // Port B
 always @(posedge clock_b) begin
+	/* verilator lint_off WIDTH */      
     q_b      <= mem[address_b];
     if(wren_b) begin
         q_b      <= data_b;
         mem[address_b] <= data_b;
     end
+	/* verilator lint_on WIDTH */     
 end
  
 endmodule

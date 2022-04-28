@@ -118,7 +118,9 @@ module BIU186_32bSync_2T_DelayRead(
 	
 	reg [1:0]NEXTSTATE;
 	reg sflush;
+	/* verilator lint_off WIDTH */ 		
 	wire [4:0]newqsize = sflush ? -IADDR[1:0] : CE186 && IFETCH && ~FLUSH ? qsize - ISIZE : qsize;
+	/* verilator lint_on WIDTH */ 		
 	wire qnofull = qsize < 13;
 	reg iread;// = (qnofull && !RAM_RD && !RAM_WR) || sflush;
 	wire [3:0]nqpos = (FLUSH && IFETCH) ? {2'b00, IADDR[1:0]} : (qpos + ISIZE);
@@ -130,12 +132,16 @@ module BIU186_32bSync_2T_DelayRead(
 	wire [31:0]q1 = rdi && (a1 == rpos) ? RAM_DIN : queue[a1];
 	wire [7:0]q2 = rdi && (a2 == rpos) ? RAM_DIN[7:0] : queue[a2][7:0];
 
+	/* verilator lint_off WIDTHCONCAT */ 
+	/* verilator lint_off WIDTH */ 	
 	assign INSTR = {q2, q1, queue[nqpos[3:2]]} >> {nqpos[1:0], 3'b000};
 //	assign DOUT = split ? {RAM_DIN[7:0], exdata} : (RAM_DIN >> {ADDR[1:0], 3'b000}); 
 	assign RAM_DOUT = {DSWAP, DSWAP};
 	assign RAM_MREQ = iread || RAM_RD || RAM_WR;
 	assign RAM_ADDR = iread ? MIADDR : ADDR[20:2] + data_bound; 
 	assign RAM_WMASK = data_bound ? {3'b000, RAM_WR} : {2'b00, WORD & RAM_WR, RAM_WR} << ADDR[1:0];
+	/* verilator lint_on WIDTH */ 	
+	/* verilator lint_off WIDTHCONCAT */ 
 
 	always @(*) begin
 		RAM_RD = 0;
@@ -199,7 +205,9 @@ module BIU186_32bSync_2T_DelayRead(
 		rdi <= iread;
 		if(rdi) queue[rpos] <= RAM_DIN;
 		if(iread) begin
+			/* verilator lint_off WIDTHCONCAT */ 			
 			qsize <= {newqsize[4:2] + 1, newqsize[1:0]};
+			/* verilator lint_off WIDTHCONCAT */ 			
 			piaddr <= MIADDR + 1;
 		end else begin
 			qsize <= newqsize;

@@ -110,6 +110,7 @@ module unit186(
 		 .HALT(HALT)
    );	 
 
+    /* verilator lint_off PINMISSING */  
 	BIU186_32bSync_2T_DelayRead BIU 
 	(
 		 .CLK(CLK), 
@@ -135,5 +136,6 @@ module unit186(
 		 .IORQ(IORQ),
 		 .FASTIO(FASTIO)
 	);
-		 
+    /* verilator lint_on PINMISSING */  
+
 endmodule

@@ -210,7 +210,9 @@ module counter(
 							newcmd <= 0;
 							count <= {init[15:1], (~mode[6] | newcmd) & init[0]};
 						end
+					/* verilator lint_off WIDTH */  						
 					end else if (gate) count <= count - 2'd2; else mode[6] <= 1;
+					/* verilator lint_on WIDTH */  					
 				3'b100:
 					if (newdata) begin
 						newcmd <= 0;

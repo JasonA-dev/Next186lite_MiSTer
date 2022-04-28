@@ -159,7 +159,9 @@ module cga_composite(
             3'd4: color_out <= red;
             3'd5: color_out <= magenta;
             3'd6: color_out <= yellow_burst;
+	        /* verilator lint_off COMBDLY */            
             3'd7: color_out <= 1'b1;
+            /* verilator lint_on COMBDLY */
         endcase
     end
 
@@ -168,6 +170,7 @@ module cga_composite(
                         (vid_del[2:0] != 0) :
                         (color_out);
 
+	/* verilator lint_off COMBDLY */
     always @ (*)
     begin
         case (vid_del[2:0])
@@ -181,6 +184,7 @@ module cga_composite(
             3'd7:  grey_level <= 7'd68;
         endcase
     end
+	/* verilator lint_on COMBDLY */
 
     assign comp_video = ~csync ? 0 : (grey_level + (vid_del[3] ? 7'd31 : 7'd0) +
                         (color_out2 ? 7'd28 : 7'd0));

@@ -56,7 +56,8 @@ V_SRC = \
 	sim.v \
 	$(RTL)/next186.sv  \
 	$(RTL)/rom.v  \	
-	$(RTL)/bram.sv  \		
+	$(RTL)/bram.sv  \	
+	$(RTL)/bramcache.sv  \			
 	$(RTL)/ZXUno/system_2MB.v \ 
 	$(RTL)/common/cache_controller.v \
 	$(RTL)/common/KB_8042.v \
@@ -105,7 +106,6 @@ V_SRC = \
 	$(RTL)/common/sram.v \
 	$(RTL)/ipcore/BRAM_8KB_BIOS.v \
 	$(RTL)/ipcore/BRAM_32KB_CRTC.v \
-	$(RTL)/common/unit186.v \
 	$(RTL)/ipcore/cache.v \
 	$(RTL)/Next186/Next186_ALU.v \
 	$(RTL)/Next186/Next186_BIU_2T_delayread.v \

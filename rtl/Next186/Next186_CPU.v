@@ -167,7 +167,9 @@ module Next186_CPU(
 	assign LOCK = CPUStatus[5];
 	assign FLUSH = FFLUSH || ~IPWSEL || (ISIZE == 3'b000);	
 	assign PORT_ADDR = FETCH[0][3] ? DX : {8'h00, FETCH[1]};
+	/* verilator lint_off WIDTH */ 		
 	wire [15:0]IPADD = ISIZE == 3'b000 ? CRTIP : IP + ISIZE;
+	/* verilator lint_on WIDTH */ 		
 	wire [15:0]IPIN = IPWSEL ? IPADD : ALUOUTA;
 	wire [1:0]MOD = FETCH[1][7:6];
 	wire [2:0]REG = FETCH[1][5:3];
@@ -282,6 +284,7 @@ module Next186_CPU(
 	 assign IADDR = {CS + {5'b00000, IPIN[15:4]}, IPIN[3:0]};
 	 assign AIMM1 = ASEL ? {FETCH[3], FETCH[2]} : {FETCH[2], FETCH[1]};
 
+	/* verilator lint_off WIDTH */ 	
 	 always @(posedge CLK)
 		if(CE) begin
 			FFLUSH <= FFLUSH_REQ;
@@ -336,6 +339,7 @@ module Next186_CPU(
 			DIVIRQ <= ~|STAGE[6:3] & DIVC & (~STAGE[2] | (~DIVSGN & IDIV)) & (&STAGE[1:0]); // DIV stage4, div loop
 			AAMIRQ <= ~|STAGE[6:2] & DIVC & (STAGE[1:0] == 2'b01); // AAM stage2, div
 		end
+		/* verilator lint_on WIDTH */ 
 
 	always @(ISEL, FETCH[0], FETCH[1], FETCH[2], FETCH[3], FETCH[4], FETCH[5])
 		case(ISEL)
@@ -533,6 +537,7 @@ module Next186_CPU(
 					4'b1011, 4'b1101: begin
 						ALUOP = 31;				// PASS B
 						IRQ = &MOD;
+	        			/* verilator lint_off CASEINCOMPLETE */  						
 						case({STAGE[1:0], REG[1]})
 							3'b001: begin	// stage1, push CS
 								RASEL = 3'b100;		// write SP
@@ -579,6 +584,7 @@ module Next186_CPU(
 								IPWSEL = 1'b0;		// ALU
 							end
 						endcase
+	        			/* verilator lint_on CASEINCOMPLETE */  						
 					end
 		// --------------------------------  bad opcode --------------------------------
 					default: begin		
@@ -894,6 +900,7 @@ module Next186_CPU(
 						ISIZE = ISIZES;
 						ALUOP = {4'b1000, REG[0]};		// BASEL = FETCH[0][1] = 1
 						WE[4] = 1'b1;			// fix MUL/IMUL 8bit flags bug
+	        			/* verilator lint_off CASEINCOMPLETE */  						
 						case(STAGE[1:0])
 							2'b00: begin		// stage1, RA -> TMP16, RB (mem) -> FETCH
 								MREQ = ~&MOD;
@@ -914,6 +921,7 @@ module Next186_CPU(
 								MREQ = 1'b0;
 							end
 						endcase
+	        			/* verilator lint_on CASEINCOMPLETE */  						
 					end
 					3'b110, 3'b111: begin	// div, idiv
 						ISIZE = ISIZES;
@@ -1103,6 +1111,7 @@ module Next186_CPU(
 				DISP16 = 1'b0;
 				AEXT = 1'b0;
 				NOBP = 1'b1;	// for RSSEL
+	        	/* verilator lint_off CASEINCOMPLETE */  				
 				case(STAGE[1:0])
 					2'b00: begin		// stage1, read ES:[DI] in FETCH[3:2], inc/dec DI
 						RASEL = 3'b111; 	// SI
@@ -1136,6 +1145,7 @@ module Next186_CPU(
 						REPINT = 1'b1;
 					end
 				endcase
+	        	/* verilator lint_on CASEINCOMPLETE */  				
 				ISIZE = IFETCH ? 1 : 0;
 			end
 // --------------------------------  (rep)scas --------------------------------
@@ -1284,6 +1294,7 @@ module Next186_CPU(
 			40: begin
 				WORD = 1'b1;
 				ALUOP = 31;				// PASS B
+	        	/* verilator lint_off CASEINCOMPLETE */  				
 				case({STAGE[1:0], FETCH[0][6]})
 					3'b000: begin	// stage1, push CS
 						RASEL = 3'b100;		// write SP
@@ -1319,6 +1330,7 @@ module Next186_CPU(
 						ISIZE = 5;
 					end
 				endcase
+	        	/* verilator lint_on CASEINCOMPLETE */  				
 			end
 // --------------------------------  ret near --------------------------------
 			41: begin
@@ -1347,6 +1359,7 @@ module Next186_CPU(
 				RSSEL = 2'b10;			// SS
 				IFETCH = STAGE[1];
 				DISEL = 2'b00;			// DIN
+	        	/* verilator lint_off CASEINCOMPLETE */  				
 				case(STAGE[1:0])
 					2'b00: begin	// stage1, pop IP in TMP16
 						WE[3] = 1'b1;			// TMP16
@@ -1368,6 +1381,7 @@ module Next186_CPU(
 						ISIZE = FETCH[0][0] ? 1 : 3;
 					end
 				endcase
+	        	/* verilator lint_on CASEINCOMPLETE */  				
 			end
 // --------------------------------  iret --------------------------------
 			43: begin  
@@ -1437,6 +1451,7 @@ module Next186_CPU(
 			47: begin
 				WORD = 1'b1;
 				WE[1:0] = 2'b11;			// RASEL_HI/RASEL_LO
+	        	/* verilator lint_off CASEINCOMPLETE */  				
 				case(STAGE[1:0])
 					2'b00: begin		// push BP
 						RASEL = 3'b100;		// write SP
@@ -1465,6 +1480,7 @@ module Next186_CPU(
 						ISIZE = 4;
 					end
 				endcase
+	        	/* verilator lint_on CASEINCOMPLETE */  				
 			end	
 // --------------------------------  leave --------------------------------
 			48: begin
@@ -1535,6 +1551,7 @@ module Next186_CPU(
 				MREQ = 1'b0;
 				IRQL = 3'b000;	// divide overflow
 				ISIZE = 2;
+	        	/* verilator lint_off CASEINCOMPLETE */  				
 				case({DIVEND, STAGE[1:0]})
 					3'b000: begin	// stage1, clear AH
 						BASEL = 1'b0;	 // TMP16
@@ -1573,9 +1590,11 @@ module Next186_CPU(
 						ALUOP = 5'b00001;		// OR
 					end
 				endcase
+	        	/* verilator lint_on CASEINCOMPLETE */  				
 			end
 // --------------------------------  reset, irq, nmi, intr --------------------------------
 			54:
+	        	/* verilator lint_off CASEINCOMPLETE */  			
 				if(STAGE[3]) begin
 					if(FETCH[5][0]) begin	// reset
 						RASEL = {1'b0, STAGE[1:0]}; 	// ES, CS, SS, DS
@@ -1656,6 +1675,7 @@ module Next186_CPU(
 					ISIZE = 0;
 					IRQ = 1'b1;
 				end
+	        	/* verilator lint_on CASEINCOMPLETE */  				
 // --------------------------------  SALC --------------------------------
 			55: begin
 				RASEL = 3'b000;	// dest AL (WORD is default 0)

@@ -8,6 +8,7 @@ verilator \
 ../rtl/next186.sv \
 ../rtl/rom.v \
 ../rtl/bram.sv \
+../rtl/bramcache.sv \
 ../rtl/ZXUno/system_2MB.v \
 ../rtl/common/cache_controller.v \
 ../rtl/common/KB_8042.v \
@@ -56,7 +57,6 @@ verilator \
 ../rtl/common/sram.v \
 ../rtl/ipcore/BRAM_8KB_BIOS.v \
 ../rtl/ipcore/BRAM_32KB_CRTC.v \
-../rtl/common/unit186.v \
 ../rtl/ipcore/cache.v \
 ../rtl/Next186/Next186_ALU.v \
 ../rtl/Next186/Next186_BIU_2T_delayread.v \

@@ -117,7 +117,7 @@ module cache_controller(
 		ddr_dout <= lowaddr[0] ? cache_QA[15:0] : cache_QA[31:16];
 	end
 	
-	
+	/*
 	cache cache_mem (
 	  .clka(ddr_clk), // input clka
 	  .ena(cache_write_data | cache_read_data),
@@ -133,10 +133,10 @@ module cache_controller(
 	  .dinb(din), // input [31 : 0] dinb
 	  .doutb(dout) // output [31 : 0] doutb
 	);
+	*/
 	
-	
-	/*
-	bramvram cache_mem
+	/* verilator lint_off WIDTH */  
+	bramcache #(.widthad_a(15), .width_a(32)) cache_mem
 	(
     // Port A
     .clock_a(ddr_clk), 				
@@ -155,7 +155,7 @@ module cache_controller(
     .byteena_a(cache_write_data | cache_read_data), 			
     .byteena_b(mreq & hit & st0)
 	);
-	*/
+	/* verilator lint_on WIDTH */  
 
 	always @(cache0, cache1, cache2, cache3, cache4, cache5, cache6, cache7) begin
 		dirty = 1'bx;
@@ -174,11 +174,13 @@ module cache_controller(
 
 	always @(posedge clk) begin
 		s_lowaddr5 <= lowaddr[6];
-		
+
+		/* verilator lint_off CASEINCOMPLETE */  		
 		case(STATE)
 			3'b000: begin
 				if(mreq) begin
 					if(hit) begin	// cache hit
+						/* verilator lint_off WIDTH */  					
 						cache0[3:1] <= fit[0] ? 3'b111 : cache0[3:1] - (cache0[3:1] > csblk); 
 						cache1[3:1] <= fit[1] ? 3'b111 : cache1[3:1] - (cache1[3:1] > csblk); 
 						cache2[3:1] <= fit[2] ? 3'b111 : cache2[3:1] - (cache2[3:1] > csblk); 
@@ -187,6 +189,7 @@ module cache_controller(
 						cache5[3:1] <= fit[5] ? 3'b111 : cache5[3:1] - (cache5[3:1] > csblk); 
 						cache6[3:1] <= fit[6] ? 3'b111 : cache6[3:1] - (cache6[3:1] > csblk); 
 						cache7[3:1] <= fit[7] ? 3'b111 : cache7[3:1] - (cache7[3:1] > csblk); 
+						/* verilator lint_on WIDTH */   						
 					end else begin	// cache miss
 						case(fblk)	// free block
 							0:	begin waddr <= cache0[16:4]; cache0[16:4] <= addr[20:8]; end
@@ -241,6 +244,7 @@ module cache_controller(
 				if(~s_lowaddr5) STATE <= 3'b000;
 			end
 		endcase
+		/* verilator lint_on CASEINCOMPLETE */  		
 	end
 	
 endmodule

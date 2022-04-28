@@ -46,12 +46,16 @@ module cga_scandoubler(
     always @ (posedge clk)
     begin
         if (line_reset & ~line_reset_old) begin
+	        /* verilator lint_off WIDTH */ 	             
             hcount_fast <= 11'd0;
+	        /* verilator lint_on WIDTH */ 	             
         end else begin
             if (hcount_fast == 10'd911) begin
                 hcount_fast <= 10'd0;
             end else begin
+	            /* verilator lint_off WIDTH */ 	                
                 hcount_fast <= hcount_fast + 11'd1;
+	            /* verilator lint_on WIDTH */ 	                
             end
 
             // Fixed doubled hsync

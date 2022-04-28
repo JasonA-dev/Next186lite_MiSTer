@@ -140,6 +140,7 @@ module cga_top(
 
     assign vga_vsync = vsync;
 
+	/* verilator lint_off WIDTH */  
     cga cga1 (
         .clk(clk_main),
         .bus_a(bus_a),
@@ -167,6 +168,8 @@ module cga_top(
         .comp_video(comp_video),
         .thin_font(thin_font)
     );
+	/* verilator lint_on WIDTH */  
+
 `ifdef SYNTHESIS
     defparam cga1.BLINK_MAX = 24'd4772727;
 `else

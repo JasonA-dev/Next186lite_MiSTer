@@ -85,7 +85,9 @@ module cga_pixel(
                 3'd4: pix_bits <= attr_byte[7:6];
                 3'd5: pix_bits <= attr_byte[5:4];
                 3'd6: pix_bits <= attr_byte[3:2];
+	            /* verilator lint_off COMBDLY */                  
                 3'd7: pix_bits <= attr_byte[1:0];
+	            /* verilator lint_on COMBDLY */                  
                 default: pix_bits <= 2'b0;
             endcase
         end else begin
@@ -122,6 +124,7 @@ module cga_pixel(
     begin
         if (video_enabled) begin
             // Hi-res vs low-res needs different adjustments
+	        /* verilator lint_off WIDTH */ 	            
             case (charpix_sel)
                 5'd0: pix <= charbits[7];
                 5'd1: pix <= charbits[6];
@@ -131,8 +134,11 @@ module cga_pixel(
                 5'd5: pix <= charbits[2];
                 5'd6: pix <= charbits[1];
                 5'd7: pix <= charbits[0];
+	            /* verilator lint_off COMBDLY */                   
                 default: pix <= 0;
+	            /* verilator lint_on COMBDLY */                   
             endcase
+	        /* verilator lint_on WIDTH */ 	            
         end else begin
             pix <= 0;
         end
@@ -141,7 +147,9 @@ module cga_pixel(
     // In 640x200 mode, alternate between the two bits from
     // the shift register outputs at specific times in the sequence
     wire[2:0] tmp_clk_seq;
+	/* verilator lint_off WIDTH */ 	    
     assign tmp_clk_seq = clk_seq + 3'd7;
+	/* verilator lint_on WIDTH */ 	    
     assign pix_640 = tmp_clk_seq[1] ? pix_bits[0] : pix_bits[1];
 
     // In Tandy 320x200x16 mode, concatenate two adjacent pixels

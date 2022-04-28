@@ -20,7 +20,10 @@ module seg_map_2MB(
 	reg ena_ems[0:3] = '{1'b0, 1'b0, 1'b0, 1'b0}; // Enable Segment Map hE000, hE400, hE800, hEC00
 
 	reg ems_enable = 1'b0;	
+	/* verilator lint_off WIDTH */  
 	assign cpurdata = EMS_OE ? ena_ems[cpuaddr[1:0]] ? map_ems[cpuaddr[1:0]] : 8'hFF : {4'b00, map[cpuaddr]};
+	/* verilator lint_on WIDTH */  
+
 	assign memdata = (memaddr[5:2] == 4'ha & ena_ems[memaddr[1:0]]) ? {1'b1, map_ems[memaddr[1:0]]} : {map[memaddr[5:2]], memaddr[1:0]}; 
 	assign f_map_to_f = (map[15] == 5'h0f);	
 	

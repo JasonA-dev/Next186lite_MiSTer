@@ -62,7 +62,9 @@ module SRAM_8bit(
 	always @(posedge sys_CLK) begin
 			STATE <= 1;
 			reg_din <= sys_DIN;
+			/* verilator lint_off WIDTH */  			
 			out_data_valid <= {out_data_valid[1:0], sys_wr_data_valid};
+			/* verilator lint_on WIDTH */  			
 			DLY <= DLY - 1;
 			sys_DOUT <= {sram_DATA, sram_data2};
 			
@@ -96,7 +98,10 @@ module SRAM_8bit(
 							sys_rd_data_valid <= 1'b1;
 						end
 						RET <= 0;
+						/* verilator lint_off WIDTH */  
 						DLY <= sys_cmd_ack[1] ? 128 - 2 : 128 - 1;
+						/* verilator lint_on WIDTH */  
+
 					end
 			endcase
 	end

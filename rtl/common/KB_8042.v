@@ -223,6 +223,7 @@ module KB_Mouse_8042(
 					if (kb_data == 8'h38) alt_pressed = 1'b1;
 					if (kb_data == 8'hb8) alt_pressed = 1'b0;				
 					if (ctrl_pressed == 1'b1 && alt_pressed == 1'b1) begin
+        				/* verilator lint_off CASEINCOMPLETE */  						
 						case (kb_data)								
 							// NMI (CTRL + ALT + F12)
 							8'hd8: nmi_button_req <= 1'b1;
@@ -235,14 +236,17 @@ module KB_Mouse_8042(
 							// CPU Speed ++ (CTRL + ALT + KeyPad +)
 							8'hce: cpu_speed_switcher <= cpu_speed_switcher > 2'd1 ? cpu_speed_switcher - 2'd1 : cpu_speed_switcher;						
 						endcase
+        				/* verilator lint_on CASEINCOMPLETE */  						
 					end
 				end
 				else begin
 					if (ctrl_pressed == 1'b1 && alt_pressed == 1'b1) begin
+	        			/* verilator lint_off CASEINCOMPLETE */  						
 						case (kb_data)															
 							// ColdReset (CTRL + ALT + DEL)
 							8'h53: kbd_creset_req <= 1'b1;							
 						endcase
+	        			/* verilator lint_on CASEINCOMPLETE */  						
 					end					
 				end
 				
@@ -295,6 +299,7 @@ module KB_Mouse_8042(
 		if(CS) 
 			if(WR)
 				if(cmd)	// 0x64 write
+        			/* verilator lint_off CASEINCOMPLETE */  						
 					case(din)
 						8'h20: ctl_outb <= 1'b1;	// read config byte
 						8'h60: wcfg <= 1;			// write config byte
@@ -305,6 +310,7 @@ module KB_Mouse_8042(
 						8'hd4: next_mouse <= 1;	//	write next byte to mouse
 						/*8'hf0, 8'hf2, 8'hf4, 8'hf6, 8'hf8, 8'hfa, 8'hfc,*/ 8'hfe: CPU_RST <= 1; // CPU reset
 					endcase 
+        			/* verilator lint_on CASEINCOMPLETE */  						
 				else begin	// 0x60 write
 					if(wcfg) cmdbyte <= {din[5:4], din[1:0]};
 					else begin

@@ -137,7 +137,9 @@ module cga(
     always @ (*)
     begin
         if (bus_mem_cs & ~bus_memr_l) begin
+	        /* verilator lint_off COMBDLY */              
             bus_int_out <= bus_out_mem;
+	        /* verilator lint_on COMBDLY */              
         end else if (status_cs & ~bus_ior_l) begin
             bus_int_out <= cga_status_reg;
         end else if (crtc_cs & ~bus_ior_l & (bus_a[0] == 1)) begin
@@ -367,6 +369,7 @@ module cga(
         end
     end
 
+	/* verilator lint_off PINMISSING */ 
     // Composite video generation
     cga_composite comp (
         .clk(clk),
@@ -378,6 +381,7 @@ module cga(
         .bw_mode(bw_mode),
         .comp_video(comp_video)
     );
+	/* verilator lint_on PINMISSING */ 
 
     cga_scandoubler scandoubler (
         .clk(clk),
