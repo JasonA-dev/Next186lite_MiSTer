@@ -19,6 +19,8 @@
     
 */
 
+`timescale 1 ps / 1 ps
+
 module jtopl_pg_comb (
     input       [ 2:0]  block,
     input       [ 9:0]  fnum,

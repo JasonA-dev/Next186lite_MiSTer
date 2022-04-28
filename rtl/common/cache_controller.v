@@ -135,7 +135,6 @@ module cache_controller(
 	);
 	*/
 	
-	/* verilator lint_off WIDTH */  
 	bramcache #(.widthad_a(15), .width_a(32)) cache_mem
 	(
     // Port A
@@ -155,7 +154,6 @@ module cache_controller(
     .byteena_a(cache_write_data | cache_read_data), 			
     .byteena_b(mreq & hit & st0)
 	);
-	/* verilator lint_on WIDTH */  
 
 	always @(cache0, cache1, cache2, cache3, cache4, cache5, cache6, cache7) begin
 		dirty = 1'bx;

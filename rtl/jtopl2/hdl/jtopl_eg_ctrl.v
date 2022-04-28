@@ -19,6 +19,8 @@
 
     */
 
+`timescale 1 ps / 1 ps
+
 module jtopl_eg_ctrl(
     input               keyon_now,
     input               keyoff_now,

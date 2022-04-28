@@ -88,8 +88,9 @@ double sc_time_stamp() {	// Called by $time in Verilog.
 }
 
 int clk_sys_freq = 48000000;
-SimClock clk_48(1); // 48mhz
-SimClock clk_12(4); // 12mhz
+SimClock clk_28_636(7); // 28.636mhz
+SimClock clk_25(8); // 25mhz
+SimClock clk_14_318(14); // 14.318mhz
 
 // VCD trace logging
 // -----------------
@@ -127,8 +128,9 @@ SimAudio audio(clk_sys_freq, true);
 void resetSim() {
 	main_time = 0;
 	top->reset = 1;
-	clk_48.Reset();
-	clk_12.Reset();
+	clk_28_636.Reset();
+	clk_25.Reset();
+	clk_14_318.Reset();
 }
 
 int verilate() {
@@ -141,18 +143,20 @@ int verilate() {
 		if (main_time == initialReset) { top->reset = 0; }
 
 		// Clock dividers
-		clk_48.Tick();
-		clk_12.Tick();
+		clk_28_636.Tick();
+		clk_25.Tick();
+		clk_14_318.Tick();
 
 		// Set clocks in core
-		top->clk_48 = clk_48.clk;
-		top->clk_12 = clk_12.clk;
+		top->clk_28_636 = clk_28_636.clk;
+		top->clk_25 = clk_25.clk;
+		top->clk_14_318 = clk_14_318.clk;
 
 		// Simulate both edges of fastest clock
-		if (clk_48.clk != clk_48.old) {
+		if (clk_28_636.clk != clk_28_636.old) {
 
 			// System clock simulates HPS functions
-			if (clk_12.clk) {
+			if (clk_28_636.clk) {
 				input.BeforeEval();
 				bus.BeforeEval();
 			}
@@ -163,7 +167,7 @@ int verilate() {
 			//}
 
 			// System clock simulates HPS functions
-			if (clk_12.clk) { bus.AfterEval(); }
+			if (clk_28_636.clk) { bus.AfterEval(); }
 		}
 
 #ifndef DISABLE_AUDIO
@@ -174,12 +178,12 @@ int verilate() {
 #endif
 
 		// Output pixels on rising edge of pixel clock
-		if (clk_48.IsRising() && top->top__DOT__ce_pix) {
+		if (clk_28_636.IsRising() && top->top__DOT__ce_pix) {
 			uint32_t colour = 0xFF000000 | top->VGA_B << 16 | top->VGA_G << 8 | top->VGA_R;
 			video.Clock(top->VGA_HB, top->VGA_VB, top->VGA_HS, top->VGA_VS, colour);
 		}
 
-		if (clk_48.IsRising()) {
+		if (clk_28_636.IsRising()) {
 			main_time++;
 		}
 		return 1;

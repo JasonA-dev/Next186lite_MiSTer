@@ -22,6 +22,7 @@
 
 */
 
+`timescale 1 ps / 1 ps
 
 module jtopl_op(
     input           rst,

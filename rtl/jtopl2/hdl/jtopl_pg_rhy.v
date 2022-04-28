@@ -19,6 +19,8 @@
     
     */
 
+`timescale 1 ps / 1 ps
+
 module jtopl_pg_rhy (
     input       [ 9:0]  phase_pre,
     // Rhythm

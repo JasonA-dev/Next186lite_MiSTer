@@ -20,6 +20,8 @@
     
 */
 
+`timescale 1 ps / 1 ps
+
 // Accumulates an arbitrary number of inputs with saturation
 // restart the sum when input "zero" is high
 

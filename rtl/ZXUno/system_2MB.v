@@ -334,7 +334,6 @@ module system_2MB
 	assign thin_font = 1'b0; // Default: No thin font	 
 
 
-	/* verilator lint_off WIDTH */  
 	cga_top cga_top (
     	// Clocks
     	.clk_10m(), // i
@@ -366,8 +365,8 @@ module system_2MB
     	.ram_d(VRAM8_DOUT), // io 7:0
 
     	// Video outputs
-    	.hsync(VGA_HSYNC), // o
-    	.vsync(VGA_VSYNC), // o
+    	.hsync(), // o
+    	.vsync(), // o
     	.vid_en_l(), // o
     	.d_r(), // o
     	.d_g(), // o
@@ -375,8 +374,8 @@ module system_2MB
     	.d_r2(), // o
     	.d_g2(), // o
     	.d_b2(), // o
-    	.vga_hsync(), // o
-    	.vga_vsync(), // o
+    	.vga_hsync(VGA_HSYNC), // o
+    	.vga_vsync(VGA_VSYNC), // o
     	.red(VGA_R), // o 5:0
     	.green(VGA_G), // o 6:0
     	.blue(VGA_B), // o 5:0
@@ -388,53 +387,52 @@ module system_2MB
     	.switch2(), // i
     	.switch3()		 // i
 	);
-	/* verilator lint_on WIDTH */  
 
-/*
-    // CGA digital to analog converter
-    cga_vgaport vga (
-        .clk(clk_vga),
-        .video(vga_video),		
-		//.video(video),		
-        .red(VGA_R),
-        .green(VGA_G),
-        .blue(VGA_B)
-    );    
 
-    cga cga1 (
-        .clk(clk_vga),        
-		.bus_a(PORT_ADDR),        
-		.bus_ior_l(WR),
-        .bus_iow_l(~WR),
-        .bus_memr_l(1'd0),
-        .bus_memw_l(1'd0),
-		.word(WORD),
-        .bus_d(CPU_DOUT),
-        .bus_out(CRTC_DOUT),
-        .bus_dir(CRTC_OE),
-        .bus_aen(~(IORQ & CPU_CE)),        
-        .ram_we_l(VRAM8_ENABLE),
-        .ram_a(VRAM8_ADDR),
-        .ram_d(VRAM8_DOUT),   
+    // // CGA digital to analog converter
+    // cga_vgaport vga (
+    //     .clk(clk_vga),
+    //     .video(vga_video),		
+	// 	//.video(video),		
+    //     .red(VGA_R),
+    //     .green(VGA_G),
+    //     .blue(VGA_B)
+    // );    
 
-        //.hsync(VGA_HSYNC),		     
-        .dbl_hsync(VGA_HSYNC),
-        .vsync(VGA_VSYNC),
+    // cga cga1 (
+    //     .clk(clk_vga),        
+	// 	.bus_a(PORT_ADDR),        
+	// 	.bus_ior_l(WR),
+    //     .bus_iow_l(~WR),
+    //     .bus_memr_l(1'd0),
+    //     .bus_memw_l(1'd0),
+	// 	// .word(WORD),
+    //     .bus_d(CPU_DOUT),
+    //     .bus_out(CRTC_DOUT),
+    //     .bus_dir(CRTC_OE),
+    //     .bus_aen(~(IORQ & CPU_CE)),        
+    //     .ram_we_l(VRAM8_ENABLE),
+    //     .ram_a(VRAM8_ADDR),
+    //     .ram_d(VRAM8_DOUT),   
 
-		.hdisp(HBlank),
-		.vdisp(VBlank),
+    //     //.hsync(VGA_HSYNC),		     
+    //     .dbl_hsync(VGA_HSYNC),
+    //     .vsync(VGA_VSYNC),
 
-		.h_end(),
-		.v_end(),
+	// 	.hdisp(HBlank),
+	// 	.vdisp(VBlank),
 
-        .video(video),
-        .dbl_video(vga_video),
-        .comp_video(comp_video),
-        .thin_font(thin_font)
-    );
+	// 	// .h_end(),
+	// 	// .v_end(),
 
-	defparam cga1.BLINK_MAX = 24'd4772727;
-*/
+    //     .video(video),
+    //     .dbl_video(vga_video),
+    //     .comp_video(comp_video),
+    //     .thin_font(thin_font)
+    // );
+
+	// defparam cga1.BLINK_MAX = 24'd4772727;
+
 	SRAM_8bit SRAM
 	(
 		.sys_CLK(clk_sdr),							// clock
@@ -505,7 +503,6 @@ module system_2MB
 	);
 	*/
 	
-	/* verilator lint_off WIDTH */  	
 	bram #(.widthad_a(15), .width_a(32)) VRAM
 	(
     // Port A
@@ -525,8 +522,6 @@ module system_2MB
     .byteena_a(CRTCVRAM), 			// input ena
     .byteena_b(VRAM8_ENABLE)
 	);
-	/* verilator lint_on WIDTH */  	
-
 	always @ (posedge clk_cpu_base)
 		div_clk_cpu <= div_clk_cpu + 3'd1;	
 

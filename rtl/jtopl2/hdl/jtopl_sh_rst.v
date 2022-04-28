@@ -18,6 +18,8 @@
 	Date: 13-6-2020
 	*/
 
+`timescale 1 ps / 1 ps
+
 // stages must be greater than 2
 module jtopl_sh_rst #(parameter width=5, stages=18, rstval=1'b0 )
 (

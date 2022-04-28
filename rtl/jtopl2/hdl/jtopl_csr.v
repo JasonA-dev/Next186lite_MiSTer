@@ -20,6 +20,8 @@
 
 */
 
+`timescale 1 ps / 1 ps
+
 module jtopl_csr #(
     parameter LEN=18, W=34
 ) ( // Circular Shift Register + input mux

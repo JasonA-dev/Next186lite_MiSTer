@@ -24,6 +24,8 @@
 // The AM logic renders a triangular waveform. The logic for it is rather
 // obscure, but apparently that's how the original was done
 
+`timescale 1 ps / 1 ps
+
 module jtopl_lfo(
     input             rst,
     input             clk,

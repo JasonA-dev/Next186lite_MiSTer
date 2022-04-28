@@ -20,6 +20,8 @@
 
 // Based on Nuked's work on OPLL and OPL3
 
+`timescale 1 ps / 1 ps
+
 module jtopl_pm (
     input       [ 2:0] vib_cnt,
     input       [ 9:0] fnum,

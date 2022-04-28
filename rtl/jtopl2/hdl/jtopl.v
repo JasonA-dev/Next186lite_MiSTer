@@ -19,6 +19,8 @@
 
     */
 
+`timescale 1 ps / 1 ps
+
 module jtopl(
     input                  rst,        // rst should be at least 6 clk&cen cycles long
     input                  clk,        // CPU clock

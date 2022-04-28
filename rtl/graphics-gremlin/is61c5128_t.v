@@ -7,6 +7,8 @@
 // Commons, PO Box 1866, Mountain View, CA 94042, USA.
 //
 
+`timescale 1 ps / 1 ps
+
 // behavioral model of IS61C5128AL SRAM
 module is61c5128(
     input[18:0] address,

@@ -6,8 +6,6 @@ module next186
 	input         pal,
 	input         scandouble,
 
-	output reg    ce_pix,
-
 	output reg    HBlank,
 	output reg    HSync,
 	output reg    VBlank,
@@ -156,10 +154,12 @@ module next186
 		endcase
 	end
 
-	/* verilator lint_off WIDTH */  		
-	assign VGA_R = raux[5:3];
-	assign VGA_G = gaux[5:3];
-	assign VGA_B = baux[5:3];
-	/* verilator lint_on WIDTH */  		
+	// assign VGA_R = raux[5:3];
+	// assign VGA_G = gaux[5:3];
+	// assign VGA_B = baux[5:3];
+
+	assign VGA_R = r;
+	assign VGA_G = g;
+	assign VGA_B = b;
 
 endmodule

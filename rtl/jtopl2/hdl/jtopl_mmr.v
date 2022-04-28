@@ -18,6 +18,8 @@
     Date: 10-6-2020
     */
 
+`timescale 1 ps / 1 ps
+
 module jtopl_mmr(
     input               rst,
     input               clk,

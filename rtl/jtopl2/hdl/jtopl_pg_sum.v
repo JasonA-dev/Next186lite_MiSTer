@@ -19,6 +19,8 @@
     
     */
 
+`timescale 1 ps / 1 ps
+
 // Original hardware uses an adder to do the multiplication
 // but I think it will take less resources of the FPGA to
 // use a real multiplier instead

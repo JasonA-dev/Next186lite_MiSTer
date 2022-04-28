@@ -22,6 +22,8 @@
 
 */
 
+`timescale 1 ps / 1 ps
+
 // Yamaha used the same table for OPN, OPM and OPL
 // Originally written in more compact way that required some logic to decompress
 // Not really worth compressing when the target is an FPGA as one BRAM will be

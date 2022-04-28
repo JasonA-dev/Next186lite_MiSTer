@@ -19,6 +19,8 @@
 
     */
 
+`timescale 1 ps / 1 ps
+
 module jtopl_eg_final(
     input      [3:0] lfo_mod,
     input      [3:0] fnum,

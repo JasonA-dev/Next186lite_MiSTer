@@ -6,6 +6,9 @@
 // http://creativecommons.org/licenses/by-sa/4.0/ or send a letter to Creative
 // Commons, PO Box 1866, Mountain View, CA 94042, USA.
 //
+
+`timescale 1 ps / 1 ps
+
 module cga_vgaport(
     input clk,
 

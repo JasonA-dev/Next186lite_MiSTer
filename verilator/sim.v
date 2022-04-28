@@ -21,9 +21,9 @@ module top (
    output VGA_VB,     // o
    output VGA_VS,      // o
 
-   output VGA_R,      // o 5:0  ?? 7:0
-   output VGA_G,      // o 5:0  ?? 7:0
-   output VGA_B,      // o 5:0  ?? 7:0
+   output [5:0] VGA_R,      // o 5:0  ?? 7:0
+   output [5:0] VGA_G,      // o 5:0  ?? 7:0
+   output [5:0] VGA_B,      // o 5:0  ?? 7:0
 
    output SRAM_WE_n,  // o
    output SRAM_A,     // o 20:0
@@ -60,26 +60,26 @@ module top (
 	input [7:0]		ioctl_index,
 	output reg		ioctl_wait=1'b0
 );
-   
+
+assign ce_pix = 1'b1;
+
 next186 next186 (
-   .clk_28_636(), // i
-   .clk_25(),     // i
-   .clk_14_318(), // i
-   .reset(),      // i
+   .clk_28_636(clk_28_636), // i
+   .clk_25(clk_25),     // i
+   .clk_14_318(clk_14_318), // i
+   .reset(reset),      // i
 	
    .pal(),        // i
    .scandouble(), // i
 
-   .ce_pix(),     // o
+   .HBlank(VGA_HB),     // o
+   .HSync(VGA_HS),      // o
+   .VBlank(VGA_VB),     // o
+   .VSync(VGA_VS),      // o
 
-   .HBlank(),     // o
-   .HSync(),      // o
-   .VBlank(),     // o
-   .VSync(),      // o
-
-   .VGA_R(),      // o 5:0
-   .VGA_G(),      // o 5:0
-   .VGA_B(),      // o 5:0
+   .VGA_R(VGA_R),      // o 5:0
+   .VGA_G(VGA_G),      // o 5:0
+   .VGA_B(VGA_B),      // o 5:0
 
    .SRAM_WE_n(),  // o
    .SRAM_A(),     // o 20:0

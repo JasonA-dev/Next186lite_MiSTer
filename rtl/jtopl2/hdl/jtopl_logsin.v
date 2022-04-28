@@ -21,6 +21,8 @@
 
 */
 
+`timescale 1 ps / 1 ps
+
 //altera message_off 10030
 
 module jtopl_logsin(

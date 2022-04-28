@@ -20,6 +20,8 @@
 
 */
 
+`timescale 1 ps / 1 ps
+
 module jtopl_acc(
     input                rst,
     input                clk,
