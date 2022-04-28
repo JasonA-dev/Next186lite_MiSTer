@@ -198,7 +198,9 @@ module system_2MB
 	wire TIMER_OE = PORT_ADDR[15:2] == 14'b00000000010000;	//   40h..43h	
 	wire LED_PORT = PORT_ADDR[15:0] == 16'h03bc;
 	wire SPEAKER_PORT = PORT_ADDR[15:0] == 16'h0061;
+	/* verilator lint_off WIDTH */
 	wire CPU_SPEED_OE = PORT_ADDR[15:0] == 12'h0097;	
+	/* verilator lint_on WIDTH */
 	wire MEMORY_SIZE = PORT_ADDR[15:0] == 16'h0098;
 	wire PCXTCORENN = PORT_ADDR[15:0] == 16'h0099;	
 	wire MEMORY_MAP = PORT_ADDR[15:4] == 12'h008;	
@@ -341,8 +343,10 @@ module system_2MB
     	.bus_d(CPU_DOUT), // io 7:0
         .bus_out(CRTC_DOUT),		
     	.bus_dir(CRTC_OE), // o
-    	//.bus_rdy(), // o
-    	//.bus_0ws_l(), // o
+
+    	.bus_rdy(), // o
+    	.bus_0ws_l(), // o
+
     	.bus_aen(~(IORQ & CPU_CE)), // i
     	.bus_ale(), // i
 
@@ -453,7 +457,7 @@ module system_2MB
 		
 	assign CPU_DIN	= s_cache_mreq ? DRAM_dout : CRTCVRAM ? vram_dout : bios_dout;
 	
-	
+	/*
 	BRAM_8KB_BIOS BIOS
 	(
 	  .clka(clk_cpu), // input clka
@@ -461,8 +465,8 @@ module system_2MB
 	  .addra(ADDR[12:2]), // input [10 : 0] addra	  
 	  .douta(bios_dout) // output [31 : 0] douta
 	);
-	
-/*
+	*/
+
 	rom #(.DW(32), .AW(11), .FN("rtl/ipcore/BRAM_8KB_BIOS.mif")) BIOS
 	(
 		.clock(clk_cpu),
@@ -470,8 +474,8 @@ module system_2MB
 		.a(ADDR[12:2]),
 		.data_out(bios_dout)
 	);
-*/
-	
+
+	/*
 	BRAM_32KB_CRTC VRAM
 	(
 	  .clka(clk_cpu), // input clka
@@ -488,8 +492,8 @@ module system_2MB
 	  .doutb(VRAM8_DOUT) // output [7 : 0] doutb  
 
 	);
+	*/
 	
-	/*
 	bram #(.widthad_a(15), .width_a(32)) VRAM
 	(
     // Port A
@@ -509,7 +513,7 @@ module system_2MB
     .byteena_a(CRTCVRAM), 			// input ena
     .byteena_b(VRAM8_ENABLE)
 	);
-	*/
+	
 
 	always @ (posedge clk_cpu_base)
 		div_clk_cpu <= div_clk_cpu + 3'd1;	
@@ -549,8 +553,10 @@ module system_2MB
 		 .ddr_wr(ddr_wr),
 		 .waddr(waddr),
 		 .cache_write_data(sys_rd_data_valid), // read SRAM, write to cache
-		 .cache_read_data(sys_wr_data_valid)
+		 .cache_read_data(sys_wr_data_valid),
+
 		 //.flush(auto_flush == 3'b101)
+		 .flush()
 	);
 
 	wire I_KB;
@@ -605,6 +611,12 @@ module system_2MB
 		 .clk(clk_cpu),
 		 .INT(INT), 
 		 .IACK(INTA & CPU_CE), 
+
+		 .dbg_slave(),
+		 .dbg_a(),		 
+		 .dbg_wr(),		 
+		 .dbg_din(),		 
+
 		 .I({I_COM1, I_MOUSE, RTCEND, I_KB, timer_int})
     );
 
@@ -626,7 +638,10 @@ module system_2MB
 		 .NMI(CPU_CE && IORQ && PORT_ADDR >= NMIonIORQ_LO && PORT_ADDR <= NMIonIORQ_HI),
 		 .RST(!rstcount[4]), 
 		 .INTA(INTA), 
+
 		 //.LOCK(LOCK), 
+		 .LOCK(),
+
 		 .HALT(HALT), 
 		 .MREQ(MREQ),
 		 .IORQ(IORQ),
@@ -660,6 +675,11 @@ module system_2MB
 		 .CLK_25(clk_25),		 
 		 .clk(clk_cpu),
 		 .gate2(speaker_on[0]),
+
+		 .dbg_wr(),
+		 .dbg_addr(),
+		 .dbg_din(),
+
 		 .out0(timer_int), 
 		 .out2(timer_spk)
    );	
@@ -673,8 +693,10 @@ module system_2MB
 		.addr(PORT_ADDR[0]),		
 		.wr_n(~WR),
 		.cs_n(~(IORQ & CPU_CE & ADLIB_OE)),
-		.snd(opl2snd)		
-		//.irq_n()		
+		.snd(opl2snd),
+		
+		.sample(),
+		.irq_n()		
 	);
 	
 	/*

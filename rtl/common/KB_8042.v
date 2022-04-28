@@ -112,7 +112,9 @@ module KB_Mouse_8042(
 	reg ctrl_pressed = 0;
 	reg alt_pressed = 0;
 	wire [5:0]joy_map;
-	reg [5:0]joy_map_aux = 1'b111111;
+
+	reg [5:0]joy_map_aux = 6'b111111;  // was 1-bit
+
 	reg [5:0]joy_map_changes = 0;	
 	reg kbd_mreset_req = 1'b0;
 	reg kbd_creset_req = 1'b0;
