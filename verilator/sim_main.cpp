@@ -20,7 +20,7 @@
 #include "sim_clock.h"
 
 #include "../imgui/imgui_memory_editor.h"
-#include <verilated_vcd_c.h> //VCD Trace
+//#include <verilated_vcd_c.h> //VCD Trace
 #include "../imgui/ImGuiFileDialog.h"
 
 #include <iostream>
@@ -93,28 +93,28 @@ SimClock clk_12(4); // 12mhz
 
 // VCD trace logging
 // -----------------
-VerilatedVcdC* tfp = new VerilatedVcdC; //Trace
-bool Trace = 0;
-char Trace_Deep[3] = "99";
-char Trace_File[30] = "sim.vcd";
-char Trace_Deep_tmp[3] = "99";
-char Trace_File_tmp[30] = "sim.vcd";
-int  iTrace_Deep_tmp = 99;
-char SaveModel_File_tmp[20] = "test", SaveModel_File[20] = "test";
+//VerilatedVcdC* tfp = new VerilatedVcdC; //Trace
+//bool Trace = 0;
+//char Trace_Deep[3] = "99";
+//char Trace_File[30] = "sim.vcd";
+//char Trace_Deep_tmp[3] = "99";
+//char Trace_File_tmp[30] = "sim.vcd";
+//int  iTrace_Deep_tmp = 99;
+//char SaveModel_File_tmp[20] = "test", SaveModel_File[20] = "test";
 
 //Trace Save/Restore
-void save_model(const char* filenamep) {
-	VerilatedSave os;
-	os.open(filenamep);
-	os << main_time; // user code must save the timestamp, etc
-	os << *top;
-}
-void restore_model(const char* filenamep) {
-	VerilatedRestore os;
-	os.open(filenamep);
-	os >> main_time;
-	os >> *top;
-}
+//void save_model(const char* filenamep) {
+//	VerilatedSave os;
+//	os.open(filenamep);
+//	os << main_time; // user code must save the timestamp, etc
+//	os << *top;
+//}
+//void restore_model(const char* filenamep) {
+//	VerilatedRestore os;
+//	os.open(filenamep);
+//	os >> main_time;
+//	os >> *top;
+//}
 
 // Audio
 // -----
@@ -157,10 +157,10 @@ int verilate() {
 				bus.BeforeEval();
 			}
 			top->eval();
-			if (Trace) {
-				if (!tfp->isOpen()) tfp->open(Trace_File);
-				tfp->dump(main_time); //Trace
-			}
+			//if (Trace) {
+			//	if (!tfp->isOpen()) tfp->open(Trace_File);
+			//	tfp->dump(main_time); //Trace
+			//}
 
 			// System clock simulates HPS functions
 			if (clk_12.clk) { bus.AfterEval(); }
@@ -199,9 +199,9 @@ int main(int argc, char** argv, char** env) {
 	Verilated::commandArgs(argc, argv);
 
 	//Prepare for Dump Signals
-	Verilated::traceEverOn(true); //Trace
-	top->trace(tfp, 1);// atoi(Trace_Deep) );  // Trace 99 levels of hierarchy
-	if (Trace) tfp->open(Trace_File);//"simx.vcd"); //Trace
+	//Verilated::traceEverOn(true); //Trace
+	//top->trace(tfp, 1);// atoi(Trace_Deep) );  // Trace 99 levels of hierarchy
+	//if (Trace) tfp->open(Trace_File);//"simx.vcd"); //Trace
 
 #ifdef WIN32
 	// Attach debug console to the verilated code
@@ -252,7 +252,7 @@ int main(int argc, char** argv, char** env) {
 	// Setup video output
 	if (video.Initialise(windowTitle) == 1) { return 1; }
 
-	bus.QueueDownload("./test.bin", 0, true);
+	//bus.QueueDownload("./test.bin", 0, true);
 
 
 #ifdef WIN32
@@ -316,6 +316,7 @@ int main(int argc, char** argv, char** env) {
 		//mem_edit.DrawContents(top->top__DOT__uut__DOT__rom__DOT__mem, 32768, 0);
 		//ImGui::End();
 
+		/*
 		// Trace/VCD window
 		ImGui::Begin(windowTitle_Trace);
 		ImGui::SetWindowPos(windowTitle_Trace, ImVec2(0, 870), ImGuiCond_Once);
@@ -348,6 +349,8 @@ int main(int argc, char** argv, char** env) {
 			strcpy(SaveModel_File, SaveModel_File_tmp); //TODO onChange Close and open new trace file
 		}
 		ImGui::End();
+		*/
+	
 		int windowX = 550;
 		int windowWidth = (VGA_WIDTH * VGA_SCALE_X) + 24;
 		int windowHeight = (VGA_HEIGHT * VGA_SCALE_Y) + 90;

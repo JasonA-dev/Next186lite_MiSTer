@@ -74,10 +74,10 @@
     <ClCompile Include="sim\vinc\verilated_save.cpp" />
     <ClCompile Include="sim\vinc\verilated_vcd_c.cpp" />
     <ClCompile Include="obj_dir\Vtop.cpp" />
+    <ClCompile Include="obj_dir\Vtop__1.cpp" />
     <ClCompile Include="obj_dir\Vtop__Syms.cpp" />
     <ClCompile Include="obj_dir\Vtop__Slow.cpp" />
-    <ClCompile Include="obj_dir\Vtop__Trace.cpp" />
-    <ClCompile Include="obj_dir\Vtop__Trace__Slow.cpp" />
+    <ClCompile Include="obj_dir\Vtop__1__Slow.cpp" />
     <ClCompile Include="sim\sim_clock.cpp" />
     <ClCompile Include="sim\sim_bus.cpp" />
     <ClCompile Include="sim\sim_console.cpp" />
@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sim\imgui\imconfig.h" />
+    <ClInclude Include="sim\imgui\imgui_config.h" />
     <ClInclude Include="sim\imgui\imgui_impl_dx11.h" />
     <ClInclude Include="sim\imgui\imgui_impl_win32.h" />
     <ClInclude Include="sim\imgui\imgui_internal.h" />
@@ -95,10 +96,9 @@
     <ClInclude Include="sim\imgui\ImGuiFileDialog.h" />
     <ClInclude Include="sim\imgui\ImGuiFileDialogConfig.h" />
     <ClInclude Include="sim\imgui\implot.h" />
-    <ClInclude Include="sim\vinc\verilated_trace.h" />
+    <ClInclude Include="sim\sim_clock.h" />
     <ClInclude Include="sim\vinc\verilated.h" />
     <ClInclude Include="sim\sim_bus.h" />
-    <ClInclude Include="sim\sim_clock.h" />
     <ClInclude Include="sim\sim_console.h" />
     <ClInclude Include="sim\sim_input.h" />
     <ClInclude Include="sim\sim_video.h" />
