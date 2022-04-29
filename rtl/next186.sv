@@ -17,9 +17,9 @@ module next186
 	input  wire clk_25,
 	input  wire clk_14_318,
 
-	output wire [5:0]VGA_R,
-	output wire [5:0]VGA_G,
-	output wire [5:0]VGA_B,
+	output wire [7:0]VGA_R,
+	output wire [7:0]VGA_G,
+	output wire [7:0]VGA_B,
 
 	output wire SRAM_WE_n,
 	output wire [20:0]SRAM_A,
@@ -45,12 +45,14 @@ module next186
 	input  wire P_D,
 	input  wire P_L,
 	input  wire P_R,
-	input  wire P_tr	
+	input  wire P_tr,	
+
+	output reg bios_loaded
 );
 
 
-	wire [5:0] r, g, b;	
-	reg [5:0] raux, gaux, baux;
+	wire [7:0] r, g, b;	
+	reg [7:0] raux, gaux, baux;
 	wire [1:0] monochrome_switcher;
 	
 	reg [5:0]red_weight[0:63] = '{ // 0.2126*R
@@ -121,7 +123,9 @@ module next186
 		.joy_left(P_L),				// i
 		.joy_right(P_R),			// i
 		.joy_fire1(P_tr),			// i
-		.joy_fire2(P_A)				// i
+		.joy_fire2(P_A),			// i
+
+		.bios_loaded(bios_loaded)	// o
 );
 
 

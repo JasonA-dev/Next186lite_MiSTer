@@ -39,9 +39,9 @@ module cga(
 	output hdisp,
 	output vdisp,
 
-    output[3:0] video,
-    output[3:0] dbl_video,
-    output[6:0] comp_video,
+    output wire [3:0]  video,
+    output wire [3:0]  dbl_video,
+    output wire [6:0]  comp_video,
 
     input thin_font
     );
@@ -114,6 +114,13 @@ module cga(
     wire cpu_memsel;
     reg[1:0] wait_state = 2'd0;
     reg bus_rdy_latch;
+
+    always @ (posedge clk)
+    begin
+        //$display("cga video %b", video);
+        //$display("cga dbl_video %b", dbl_video);
+        //$display("cga comp_video %b", comp_video);                
+    end
 
     // Synchronize ISA bus control lines to our clock
     always @ (posedge clk)
@@ -266,7 +273,7 @@ module cga(
     defparam crtc.V_MAXSCAN = 5'd7;
     defparam crtc.C_START = 7'd6;
     defparam crtc.C_END = 5'd7;
-/*
+
     // Interface to video SRAM chip
 //`ifdef CGA_SNOW
     cga_vram video_buffer (
@@ -281,11 +288,12 @@ module cga(
         .pixel_data(ram_1_d),    // o
         .pixel_read(vram_read),
         .ram_a(ram_a),
-        .ram_d(ram_d),
+        .ram_din(ram_d), 
+        //.ram_d(ram_dout),
         .ram_we_l(ram_we_l),
         .isa_op_enable(isa_op_enable)
     );
-    */
+
     /*
 `else
     // Just use the MDA VRAM interface (no snow)

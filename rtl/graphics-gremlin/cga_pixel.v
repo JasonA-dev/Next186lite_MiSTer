@@ -53,14 +53,17 @@ module cga_pixel(
     wire load_shifter;
     wire[2:0] charpix_sel;
 
-    initial begin
-        $display("cga_pixel");
-    end
-
     // Character ROM
     reg[7:0] char_rom[0:4095];
     initial $readmemh("cga.hex", char_rom, 0, 4095);
-
+/*
+    integer i;
+    initial begin
+        for(i=0;i<4096;i=i+1) begin
+            $display("%h", char_rom[i]);
+        end
+    end
+*/
     // Latch character and attribute data from VRAM
     // at appropriate times
     always @ (posedge clk)

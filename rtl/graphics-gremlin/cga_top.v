@@ -48,13 +48,13 @@ module cga_top(
     output d_r2,
     output d_g2,
     output d_b2,
-    
+
     output vga_hsync,
     output vga_vsync,
 
-    output[5:0] red,
+    output[6:0] red,
     output[6:0] green,
-    output[5:0] blue,
+    output[6:0] blue,
 
 	output hdisp,
 	output vdisp,
@@ -80,12 +80,19 @@ module cga_top(
     wire composite_on;
     wire thin_font;
 
-    wire[5:0] vga_red;
-    wire[6:0] vga_green;
-    wire[5:0] vga_blue;
+    wire[6:0] vga_red; // 5
+    wire[6:0] vga_green; 
+    wire[6:0] vga_blue; // 5
 
     wire[6:0] comp_video;
 
+/*
+always @ (*) begin
+	if(vga_red>0) $display("vga_red %b", vga_red);
+	//if(vga_green>0) $display("vga_green %b", vga_green);
+	if(vga_blue>0) $display("vga_blue %b", vga_blue);
+end
+*/
     // Unused pins on video connector
     assign bus_0ws_l = 1'b1;
     assign vid_en_l = 1'b0;
@@ -112,6 +119,7 @@ module cga_top(
     // Could also use an SB_PLL40_2_PAD to generate an additional
     // 14.318MHz clock without having to use a separate divider.
     wire int_clk;
+    /*
     `ifdef SYNTHESIS
     SB_PLL40_PAD #(
             .FEEDBACK_PATH("SIMPLE"),
@@ -127,22 +135,33 @@ module cga_top(
             .PLLOUTGLOBAL(clk_main)
         );
     `else
+*/
     assign clk_main = clk_14m318;
-    `endif
+    //`endif
+
+/*
+    always @ (posedge clk_main)
+    begin
+        $display("clk_main cga_top");
+    end
+*/
 
     // CGA digital to analog converter
     cga_vgaport vga (
         .clk(clk_main),
-        .video(vga_video),
+        .video(video), //vga_video
         .red(vga_red),
         .green(vga_green),
         .blue(vga_blue)
     );
 
     // Analog output mux: Either RGB or composite
-    assign red = composite_on ? 6'd0 : vga_red;
-    assign green = composite_on ? comp_video : vga_green;
-    assign blue = composite_on ? 6'd0 : vga_blue;
+    assign red = vga_red;
+    assign green = vga_green;
+    assign blue = vga_blue;
+    //assign red = composite_on ? 6'd0 : vga_red;
+    //assign green = composite_on ? comp_video : vga_green;
+    //assign blue = composite_on ? 6'd0 : vga_blue;
 
     assign vga_vsync = vsync;
 

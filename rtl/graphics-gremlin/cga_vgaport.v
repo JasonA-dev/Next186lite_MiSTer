@@ -14,24 +14,33 @@ module cga_vgaport(
 
     input[3:0] video,
 
-    // Analog outputs
-    output[5:0] red,
+    // Analog outputs 
+    output[6:0] red,
     output[6:0] green,
-    output[5:0] blue
+    output[6:0] blue
     );
 
     reg[17:0] c;
 
-    assign blue = c[5:0];
-    assign green = {c[11:6], 1'b1}; // FIXME: 1?
-    assign red = c[17:12];
+    assign blue  = {c[5:0],   1'b1}; // c[5:0];
+    assign green = {c[11:6],  1'b1}; // FIXME: 1?
+    assign red   = {c[17:12], 1'b1}; // c[17:12];
 
     initial begin
-        $display("cga_vgaport");
+    //    $display("cga_vgaport");
     end
 
-    always @(posedge clk)
+    /*
+    always @ (posedge clk)
     begin
+        $display("clk cga_vgaport");
+    end
+    */
+
+    always @ (posedge clk)
+    begin
+       // $display("cga_vgaport video %b", video); 
+        /*       
         case(video)
             4'h0: begin c <= 18'b000000_000000_000000; $display("video %h", video); end
             4'h1: begin c <= 18'b000000_000000_101010; $display("video %h", video); end
@@ -51,5 +60,6 @@ module cga_vgaport(
             4'hF: begin c <= 18'b111111_111111_111111; $display("video %h", video); end
             default: $display("video %h", video);
         endcase
+        */
     end
 endmodule

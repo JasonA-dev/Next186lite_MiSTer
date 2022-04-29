@@ -25,6 +25,7 @@ module cga_vgaport(
 
     always @(posedge clk)
     begin
+        $display("cga_vgaport common");
         case(video)
             4'h0: c <= 18'b000000_000000_000000;
             4'h1: c <= 18'b000000_000000_101010;

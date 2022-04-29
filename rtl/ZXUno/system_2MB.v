@@ -165,9 +165,10 @@ module system_2MB
 		 input  wire joy_left,
 		 input  wire joy_right,
 		 input  wire joy_fire1,
-		 input  wire joy_fire2
-		 		 
-    );
+		 input  wire joy_fire2,
+
+		 output wire bios_loaded
+);
 		 
 	wire [15:0]sys_DIN;
 	wire [15:0]sys_DOUT;
@@ -333,6 +334,12 @@ module system_2MB
     // Thin font switch (TODO: switchable with Keyboard shortcut)    
 	assign thin_font = 1'b0; // Default: No thin font	 
 
+/*
+    always @ (posedge clk_cpu_base)
+    begin
+        $display("cpu_din %b, cpu_dout %b", CPU_DIN, CPU_DOUT);                
+    end
+*/
 
 	cga_top cga_top (
     	// Clocks
@@ -387,8 +394,13 @@ module system_2MB
     	.switch2(), // i
     	.switch3()		 // i
 	);
-
-
+/*
+always @ (*) begin
+	if(VGA_R>0) $display("VGA_R %b", VGA_R);
+	//if(VGA_G>0) $display("VGA_G %b", VGA_G);
+	if(VGA_B>0) $display("VGA_B %b", VGA_B);
+end
+*/
     // // CGA digital to analog converter
     // cga_vgaport vga (
     //     .clk(clk_vga),
@@ -476,12 +488,13 @@ module system_2MB
 	);
 	*/
 
-	rom #(.DW(32), .AW(11), .FN("BRAM_8KB_BIOS.mif")) BIOS
+	rom #(.DW(32), .AW(11), .FN("ipcore/BRAM_8KB_BIOS.mif")) BIOS
 	(
 		.clock(clk_cpu),
 		.ce(BIOSROM),		
 		.a(ADDR[12:2]),
-		.data_out(bios_dout)
+		.data_out(bios_dout),
+		.bios_loaded(bios_loaded)
 	);
 
 	/*

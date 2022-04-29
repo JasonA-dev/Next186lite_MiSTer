@@ -287,12 +287,15 @@ pll pll
 reg reset;
 
 always @(posedge clk_sys) begin
-	reset <= (!pll_locked | status[0] | buttons[1] | RESET);
+	reset <= (!pll_locked | status[0] | buttons[1] | RESET | bios_loaded);
+	        $display("reset %b, bios_loaded %b", reset, bios_loaded);    
 end
 
 //////////////////////////////////////////////////////////////////
 
 //wire [1:0] col = status[4:3];
+
+reg bios_loaded = 1'b0;
 
 wire HBlank;
 wire HSync;
@@ -332,7 +335,7 @@ next186 next186Lite
 
 	.SRAM_WE_n(SDRAM_nWE), 	// o
 	.SRAM_A(SDRAM_A), 		// o 20:0  fix
-	.SRAM_D(SDRAM_DQ[7:0]), 		// io 7:0  fix
+	.SRAM_D(SDRAM_DQ[7:0]), // io 7:0  fix
 
 	//.LED(), 		// o
 
@@ -345,16 +348,15 @@ next186 next186Lite
 	//.PS2DATB(), 	// io
 
 	.SD_nCS(SD_CS), 		// o
-	.SD_DI(SD_MISO), 		// o
+	.SD_DI(SD_MOSI), 		// o
 	.SD_CK(SD_SCK), 		// o
-	.SD_DO(SD_MOSI), 		// i
-
+	.SD_DO(SD_MISO), 		// i
 
 	.P_U(joystick_0[0]), 		// i joy_up
 	.P_D(joystick_0[1]), 		// i joy_down
 	.P_L(joystick_0[2]), 		// i joy_left
 	.P_R(joystick_0[3]), 		// i joy_right
-	.P_tr(joystick_0[4]) 		// i joy_fire1	 
+	.P_tr(joystick_0[4]), 		// i joy_fire1	 
 	.P_A(joystick_0[5]), 		// i joy_fire2
 
 /*	system_2MB
@@ -365,6 +367,7 @@ next186 next186Lite
 
 		.monochrome_switcher(monochrome_switcher)		
 */
+	.bios_loaded(bios_loaded)
 );
 
 assign CLK_VIDEO = clk_28_636;
@@ -376,9 +379,9 @@ reg  [26:0] act_cnt;
 always @(posedge clk_sys) act_cnt <= act_cnt + 1'd1; 
 assign LED_USER    = act_cnt[26]  ? act_cnt[25:18]  > act_cnt[7:0]  : act_cnt[25:18]  <= act_cnt[7:0];
 
-wire [5:0] r;
-wire [5:0] g;
-wire [5:0] b;
+wire [7:0] r;
+wire [7:0] g;
+wire [7:0] b;
 wire freeze_sync;
 
 video_mixer #(.LINE_LENGTH(448), .HALF_DEPTH(0)) mixer
@@ -387,9 +390,9 @@ video_mixer #(.LINE_LENGTH(448), .HALF_DEPTH(0)) mixer
     .hq2x(scale == 1),
     .scandoubler (scale || forced_scandoubler),
 
-    .R({r[5:0],r[5]}), 
-    .G({g[5:0],g[5]}), 
-    .B({b[5:0],b[5]}),
+    .R({r[7:0],r[7]}), 
+    .G({g[7:0],g[7]}), 
+    .B({b[7:0],b[7]}),
 );
 
 endmodule

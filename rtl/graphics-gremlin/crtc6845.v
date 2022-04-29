@@ -171,14 +171,14 @@ module crtc6845(
     begin
         if (divclk) begin
             if (h_count == h_total) begin
-                $display("1 h_disp %d, h_total %d, h_synccount %d", hdisp, h_total, h_synccount);                   
+               // $display("1 h_disp %d, h_total %d, h_synccount %d", hdisp, h_total, h_synccount);                   
                 h_count <= 8'd0;
                 hdisp <= 1'b1;
             end else begin
                 h_count <= h_count + 1;
                 // Blanking
                 if (h_count + 1 == h_disp) begin
-                    $display("1 h_disp %d, h_total %d, h_synccount %d", hdisp, h_total, h_synccount);                      
+                 //   $display("1 h_disp %d, h_total %d, h_synccount %d", hdisp, h_total, h_synccount);                      
                     hdisp <= 1'b0;
                 end
                 // Sync output
@@ -212,7 +212,7 @@ module crtc6845(
                 if (v_scancount != v_maxscan) begin
                     v_scancount <= v_scancount + 1;
                 end else begin
-                    $display("3 v_disp %d, v_total %d, v_maxscan %d, v_rowcount %d, v_scancount %d, v_synccount %d", vdisp, v_total, v_maxscan, v_rowcount, v_scancount, v_synccount);                       
+                    //$display("3 v_disp %d, v_total %d, v_maxscan %d, v_rowcount %d, v_scancount %d, v_synccount %d", vdisp, v_total, v_maxscan, v_rowcount, v_scancount, v_synccount);                       
                     v_scancount <= 0;
                     v_rowcount <= v_rowcount + 1;
 
@@ -231,7 +231,7 @@ module crtc6845(
                 if (v_scancount != v_maxscan + v_totaladj) begin
                     v_scancount <= v_scancount + 1;
                 end else begin
-                    $display("4 v_disp %d, v_total %d, v_maxscan %d, v_rowcount %d, v_scancount %d, v_synccount %d", vdisp, v_total, v_maxscan, v_rowcount, v_scancount, v_synccount);                        
+                    //$display("4 v_disp %d, v_total %d, v_maxscan %d, v_rowcount %d, v_scancount %d, v_synccount %d", vdisp, v_total, v_maxscan, v_rowcount, v_scancount, v_synccount);                        
                     v_scancount <= 0;
                     v_rowcount <= 0;
                     vdisp <= 1'b1;
