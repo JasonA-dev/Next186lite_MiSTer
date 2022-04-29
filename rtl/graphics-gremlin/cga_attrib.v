@@ -48,6 +48,10 @@ module cga_attrib(
     wire[3:0] rgbi;
     wire[3:0] active_area;
 
+    initial begin
+        $display("cga_attrib");
+    end
+
     // Extract attributes from the attribute byte
     assign att_fg = att_byte[3:0];
     assign att_bg = blink_enabled ? {1'b0, att_byte[6:4]} : att_byte[7:4];
@@ -96,6 +100,8 @@ module cga_attrib(
                 2'b11: pix_out <= cga_color_reg[3:0]; // Overscan color
             endcase
         end
+
+        //$display("pix_out %h", pix_out);        
     end
 
 endmodule

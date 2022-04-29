@@ -54,6 +54,10 @@ module cga_vram(
     // we begin the write operation. (tHZWE)
     //assign ram_d = (~ram_we_l & ~clk) ? ram_write_data : 8'hZZ;
 
+    initial begin
+        $display("cga_vram");
+    end
+
     // RAM address pin mux
     always @ (*)
     begin

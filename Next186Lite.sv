@@ -381,7 +381,7 @@ wire [5:0] g;
 wire [5:0] b;
 wire freeze_sync;
 
-video_mixer #(.LINE_LENGTH(544), .HALF_DEPTH(0)) mixer
+video_mixer #(.LINE_LENGTH(448), .HALF_DEPTH(0)) mixer
 (
 	.*,
     .hq2x(scale == 1),

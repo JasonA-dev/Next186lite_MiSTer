@@ -53,6 +53,10 @@ module cga_pixel(
     wire load_shifter;
     wire[2:0] charpix_sel;
 
+    initial begin
+        $display("cga_pixel");
+    end
+
     // Character ROM
     reg[7:0] char_rom[0:4095];
     initial $readmemh("cga.hex", char_rom, 0, 4095);
@@ -126,6 +130,7 @@ module cga_pixel(
     always @ (*)
     begin
         if (video_enabled) begin
+            //$display("pixel: video_enabled: charpix_sel %d", charpix_sel);            
             // Hi-res vs low-res needs different adjustments
 	        /* verilator lint_off WIDTH */ 	            
             case (charpix_sel)

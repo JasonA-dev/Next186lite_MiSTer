@@ -26,26 +26,30 @@ module cga_vgaport(
     assign green = {c[11:6], 1'b1}; // FIXME: 1?
     assign red = c[17:12];
 
+    initial begin
+        $display("cga_vgaport");
+    end
+
     always @(posedge clk)
     begin
         case(video)
-            4'h0: c <= 18'b000000_000000_000000;
-            4'h1: c <= 18'b000000_000000_101010;
-            4'h2: c <= 18'b000000_101010_000000;
-            4'h3: c <= 18'b000000_101010_101010;
-            4'h4: c <= 18'b101010_000000_000000;
-            4'h5: c <= 18'b101010_000000_101010;
-            4'h6: c <= 18'b101010_010101_000000; // Brown!
-            4'h7: c <= 18'b101010_101010_101010;
-            4'h8: c <= 18'b010101_010101_010101;
-            4'h9: c <= 18'b010101_010101_111111;
-            4'hA: c <= 18'b010101_111111_010101;
-            4'hB: c <= 18'b010101_111111_111111;
-            4'hC: c <= 18'b111111_010101_010101;
-            4'hD: c <= 18'b111111_010101_111111;
-            4'hE: c <= 18'b111111_111111_010101;
-            4'hF: c <= 18'b111111_111111_111111;
-            default: ;
+            4'h0: begin c <= 18'b000000_000000_000000; $display("video %h", video); end
+            4'h1: begin c <= 18'b000000_000000_101010; $display("video %h", video); end
+            4'h2: begin c <= 18'b000000_101010_000000; $display("video %h", video); end
+            4'h3: begin c <= 18'b000000_101010_101010; $display("video %h", video); end
+            4'h4: begin c <= 18'b101010_000000_000000; $display("video %h", video); end
+            4'h5: begin c <= 18'b101010_000000_101010; $display("video %h", video); end
+            4'h6: begin c <= 18'b101010_010101_000000; $display("video %h", video); end // Brown!
+            4'h7: begin c <= 18'b101010_101010_101010; $display("video %h", video); end
+            4'h8: begin c <= 18'b010101_010101_010101; $display("video %h", video); end
+            4'h9: begin c <= 18'b010101_010101_111111; $display("video %h", video); end
+            4'hA: begin c <= 18'b010101_111111_010101; $display("video %h", video); end
+            4'hB: begin c <= 18'b010101_111111_111111; $display("video %h", video); end
+            4'hC: begin c <= 18'b111111_010101_010101; $display("video %h", video); end
+            4'hD: begin c <= 18'b111111_010101_111111; $display("video %h", video); end
+            4'hE: begin c <= 18'b111111_111111_010101; $display("video %h", video); end
+            4'hF: begin c <= 18'b111111_111111_111111; $display("video %h", video); end
+            default: $display("video %h", video);
         endcase
     end
 endmodule

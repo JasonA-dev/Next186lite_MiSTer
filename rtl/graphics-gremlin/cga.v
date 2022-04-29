@@ -66,7 +66,7 @@ module cga(
     wire[7:0] bus_out_crtc;
     wire[7:0] bus_out_mem;
     wire[7:0] cga_status_reg;
-    reg[7:0] cga_control_reg = 8'b0010_1000; // 0010_1001
+    reg[7:0] cga_control_reg = 8'b0010_1001; // 0010_1001
     reg[7:0] cga_color_reg = 8'b0000_0000;
     wire hres_mode;
     wire grph_mode;
@@ -206,9 +206,9 @@ module cga(
     assign grph_mode = cga_control_reg[1]; // 1=graphics, 0=text
     assign bw_mode = cga_control_reg[2]; // 1=b&w, 0=color
     //if (NO_DISPLAY_DISABLE == 1) begin
-    //    assign video_enabled = 1;
+        assign video_enabled = 1;
     //end else begin
-        assign video_enabled = cga_control_reg[3];
+    //    assign video_enabled = cga_control_reg[3];
     //end
     assign mode_640 = cga_control_reg[4]; // 1=640x200 mode, 0=others
     assign blink_enabled = cga_control_reg[5];

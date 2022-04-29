@@ -27,7 +27,6 @@ module crtc6845(
     // Video control signals
     output hsync,
     output vsync,
-
 	output reg hdisp,
 	output reg vdisp,
 
@@ -35,7 +34,8 @@ module crtc6845(
     output cursor,
     output [13:0] mem_addr,
     output [4:0] row_addr,
-    output line_reset);
+    output line_reset
+);
 
     parameter H_TOTAL = 0;
     parameter H_DISP = 0;
@@ -171,12 +171,14 @@ module crtc6845(
     begin
         if (divclk) begin
             if (h_count == h_total) begin
+                $display("1 h_disp %d, h_total %d, h_synccount %d", hdisp, h_total, h_synccount);                   
                 h_count <= 8'd0;
                 hdisp <= 1'b1;
             end else begin
                 h_count <= h_count + 1;
                 // Blanking
                 if (h_count + 1 == h_disp) begin
+                    $display("1 h_disp %d, h_total %d, h_synccount %d", hdisp, h_total, h_synccount);                      
                     hdisp <= 1'b0;
                 end
                 // Sync output
@@ -210,6 +212,7 @@ module crtc6845(
                 if (v_scancount != v_maxscan) begin
                     v_scancount <= v_scancount + 1;
                 end else begin
+                    $display("3 v_disp %d, v_total %d, v_maxscan %d, v_rowcount %d, v_scancount %d, v_synccount %d", vdisp, v_total, v_maxscan, v_rowcount, v_scancount, v_synccount);                       
                     v_scancount <= 0;
                     v_rowcount <= v_rowcount + 1;
 
@@ -228,6 +231,7 @@ module crtc6845(
                 if (v_scancount != v_maxscan + v_totaladj) begin
                     v_scancount <= v_scancount + 1;
                 end else begin
+                    $display("4 v_disp %d, v_total %d, v_maxscan %d, v_rowcount %d, v_scancount %d, v_synccount %d", vdisp, v_total, v_maxscan, v_rowcount, v_scancount, v_synccount);                        
                     v_scancount <= 0;
                     v_rowcount <= 0;
                     vdisp <= 1'b1;
@@ -248,6 +252,8 @@ module crtc6845(
                 end
             end
         end
+        //$display("2 v_disp %d, v_rowcount %d, v_scancount %d, v_synccount %d", vdisp, v_rowcount, v_scancount, v_synccount);          
+
     end
 
     // Cursor

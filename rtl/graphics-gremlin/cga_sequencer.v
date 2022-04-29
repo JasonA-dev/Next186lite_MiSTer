@@ -29,6 +29,10 @@ module cga_sequencer(
     wire crtc_clk_int;
     reg[4:0] clkdiv = 5'b0;
 
+    initial begin
+        $display("cga_sequencer");
+    end
+
     // Sequencer: times internal operations
     always @ (posedge clk)
     begin

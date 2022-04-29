@@ -40,6 +40,10 @@ module cga_scandoubler(
 
     // Vertical lines are doubled, so 262 * 2 = 524 which matches exactly.
 
+    initial begin
+        $display("cga_scandoubler");
+    end
+
     always @ (posedge clk)
     begin
         line_reset_old <= line_reset;

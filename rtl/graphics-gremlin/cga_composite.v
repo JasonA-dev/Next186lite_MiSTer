@@ -57,6 +57,10 @@ module cga_composite(
 
     reg hclk_old;
 
+    initial begin
+        $display("cga_composite");
+    end
+
     always @ (posedge clk)
     begin
         hclk_old <= hclk;

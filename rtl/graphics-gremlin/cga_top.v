@@ -48,8 +48,10 @@ module cga_top(
     output d_r2,
     output d_g2,
     output d_b2,
+    
     output vga_hsync,
     output vga_vsync,
+
     output[5:0] red,
     output[6:0] green,
     output[5:0] blue,
@@ -81,6 +83,7 @@ module cga_top(
     wire[5:0] vga_red;
     wire[6:0] vga_green;
     wire[5:0] vga_blue;
+
     wire[6:0] comp_video;
 
     // Unused pins on video connector
