@@ -4,6 +4,8 @@ set_global_assignment -name SYSTEMVERILOG_FILE rtl/next186.sv
 set_global_assignment -name SDC_FILE Next186Lite.sdc
 set_global_assignment -name SYSTEMVERILOG_FILE Next186Lite.sv
 set_global_assignment -name VERILOG_FILE rtl/rom.v
+set_global_assignment -name VERILOG_FILE rtl/dpram.v
+set_global_assignment -name VHDL_FILE rtl/sram.vhd
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/bram.sv
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/bramcache.sv
 

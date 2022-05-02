@@ -333,6 +333,7 @@ next186 next186Lite
 	.VGA_G(g),  		// o 5:0
 	.VGA_B(b),  		// o 5:0
 
+	.SRAM_CLK(SDRAM_CLK),
 	.SRAM_WE_n(SDRAM_nWE), 	// o
 	.SRAM_A(SDRAM_A), 		// o 20:0  fix
 	.SRAM_D(SDRAM_DQ[7:0]), // io 7:0  fix
@@ -367,6 +368,14 @@ next186 next186Lite
 
 		.monochrome_switcher(monochrome_switcher)		
 */
+
+	.ioctl_download(ioctl_download),
+	.ioctl_wr(ioctl_wr),
+	.ioctl_addr(ioctl_addr),
+	.ioctl_dout(ioctl_dout),
+	.ioctl_index(ioctl_index),
+	.ioctl_wait(ioctl_wait),
+
 	.bios_loaded(bios_loaded)
 );
 

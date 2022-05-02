@@ -21,6 +21,7 @@ module next186
 	output wire [7:0]VGA_G,
 	output wire [7:0]VGA_B,
 
+	input  wire SRAM_CLK,
 	output wire SRAM_WE_n,
 	output wire [20:0]SRAM_A,
 	inout  wire [7:0]SRAM_D,
@@ -47,9 +48,15 @@ module next186
 	input  wire P_R,
 	input  wire P_tr,	
 
+	input wire ioctl_download,
+	input wire ioctl_wr,
+	input wire ioctl_addr,
+	input wire ioctl_dout,
+	input wire ioctl_index,
+	output wire ioctl_wait,
+
 	output reg bios_loaded
 );
-
 
 	wire [7:0] r, g, b;	
 	reg [7:0] raux, gaux, baux;
@@ -97,6 +104,7 @@ module next186
 
 		//.video(video),				// o
 
+		.SRAM_CLK(SRAM_CLK),
 		.SRAM_ADDR(SRAM_A),			// o 20
 		.SRAM_DATA(SRAM_D),			// io 7
 		.SRAM_WE_n(SRAM_WE_n),		// o
@@ -124,6 +132,13 @@ module next186
 		.joy_right(P_R),			// i
 		.joy_fire1(P_tr),			// i
 		.joy_fire2(P_A),			// i
+
+		.ioctl_download(ioctl_download),
+		.ioctl_wr(ioctl_wr),
+		.ioctl_addr(ioctl_addr),
+		.ioctl_dout(ioctl_dout),
+		.ioctl_index(ioctl_index),
+		.ioctl_wait(ioctl_wait),
 
 		.bios_loaded(bios_loaded)	// o
 );

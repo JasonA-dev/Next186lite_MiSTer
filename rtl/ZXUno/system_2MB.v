@@ -133,6 +133,8 @@ module system_2MB
 		 input clk_sdr,
 		 input clk_sram,		 
 		 input clk_25,
+
+		 input wire SRAM_CLK,
 		 output [20:0]SRAM_ADDR,
 		 inout [7:0]SRAM_DATA,
 		 output SRAM_WE_n,
@@ -159,7 +161,9 @@ module system_2MB
 		 inout PS2_CLK2,
 		 inout PS2_DATA1,
 		 inout PS2_DATA2,
+
 		 output wire [1:0] monochrome_switcher,
+
 		 input  wire joy_up,
 		 input  wire joy_down,
 		 input  wire joy_left,
@@ -167,7 +171,14 @@ module system_2MB
 		 input  wire joy_fire1,
 		 input  wire joy_fire2,
 
-		 output wire bios_loaded
+		input wire ioctl_download,
+		input wire ioctl_wr,
+		input wire ioctl_addr,
+		input wire ioctl_dout,
+		input wire ioctl_index,
+		output wire ioctl_wait,
+
+		output wire bios_loaded
 );
 		 
 	wire [15:0]sys_DIN;
@@ -445,22 +456,38 @@ end
 
 	// defparam cga1.BLINK_MAX = 24'd4772727;
 
+	
+	sram SRAM 
+	(
+		.clk(clk_sram), 		//	: in std_logic;
+		.addr(sysaddr), 		//	: in std_logic_vector(AddrWidth - 1 downto 0);
+		.din(sys_DIN),	 		//  : in std_logic_vector(DataWidth - 1 downto 0);
+		.dout(sys_DOUT),		//  : out std_logic_vector(DataWidth - 1 downto 0);
+		.we_n(sys_wr_data_valid),		//  : in std_logic;
+		.ce_n(sys_rd_data_valid)					//	: in std_logic
+	);
+	
+	//wire sram_in;
+	//wire sram_out;
+	//wire sram_ce;
+	/*
 	SRAM_8bit SRAM
 	(
 		.sys_CLK(clk_sdr),							// clock
 		.sys_CMD(command),							// 00=nop, 01 = write 256 bytes, 11=read 256 bytes
 		.sys_ADDR(sysaddr),							// byte address
 		.sys_DIN(sys_DIN),							// data input
-		.sys_DOUT(sys_DOUT),							// data output
-		.sys_rd_data_valid(sys_rd_data_valid),	// data valid read
-		.sys_wr_data_valid(sys_wr_data_valid),	// data valid write
+		.sys_DOUT(sys_DOUT),						// data output
+		.sys_rd_data_valid(sys_rd_data_valid),		// data valid read
+		.sys_wr_data_valid(sys_wr_data_valid),		// data valid write
 		
-		.sram_clk(clk_sram),
-		.sram_n_WE(SRAM_WE_n),						// SRAM #WE
-		.sram_ADDR(SRAM_ADDR),						// SRAM address
-		.sram_DATA(SRAM_DATA)						// SRAM data
+		.sram_clk(SRAM_CLK),
+		.sram_n_WE(SRAM_WE_n),						// SRAM #WE  SRAM_WE_n
+		.sram_ADDR(SRAM_ADDR),						// SRAM address  SRAM_ADDR
+		.sram_DATA(SRAM_DATA)						// SRAM data  SRAM_DATA
 	);
-	
+	*/
+
 	parameter crtc_addr = 6'b010111; // B8000 (32 KB)	
 	parameter bios_addr_fe000 = 8'b01111111; // FE000 (2 KB)
 		
@@ -506,15 +533,36 @@ end
 	  .addra(ADDR[14:2]), // input [12 : 0] addra
 	  .dina(DOUT),
 	  .douta(vram_dout), // output [31 : 0] douta
+
 	  .clkb(clk_vga), // input clka
 	  .web(1'b0),
 	  .enb(VRAM8_ENABLE),
 	  .addrb(VRAM8_ADDR[14:0]), // input [14 : 0] addrb
 	  .dinb(8'h0),
 	  .doutb(VRAM8_DOUT) // output [7 : 0] doutb  
-
 	);
 	*/
+
+	/*
+	dpram #(.DATAWIDTH(32), .ADDRWIDTH(15)) VRAM
+	(
+		.clock(clk_cpu),
+		.wren_a(RAM_WMASK),
+		.address_a(ADDR[14:2]),
+		.data_a(DOUT),
+		.q_a(vram_dout),
+
+		//.clock1(clk_vga),
+    	.wren_b(1'b0),		
+		.address_b(VRAM8_ADDR[14:0]),
+		.data_b(8'h0),
+		.q_b(VRAM8_DOUT),
+
+		//.byteena_a (CRTCVRAM),
+		//.byteena_b (VRAM8_ENABLE)
+	);
+	*/
+
 	
 	bram #(.widthad_a(15), .width_a(32)) VRAM
 	(
@@ -535,6 +583,8 @@ end
     .byteena_a(CRTCVRAM), 			// input ena
     .byteena_b(VRAM8_ENABLE)
 	);
+	
+
 	always @ (posedge clk_cpu_base)
 		div_clk_cpu <= div_clk_cpu + 3'd1;	
 
@@ -662,7 +712,7 @@ end
 		 .INTA(INTA), 
 
 		 //.LOCK(LOCK), 
-		 .LOCK(),
+		 .LOCK(LOCK),
 
 		 .HALT(HALT), 
 		 .MREQ(MREQ),
